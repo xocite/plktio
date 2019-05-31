@@ -36,9 +36,18 @@ const Layout = ({ children }) => (
         >
           <main>{children}</main>
           <footer>
-            © {new Date().getFullYear()}, Built with
+            Built with
             {` `}
-            <a href="https://www.gatsbyjs.org">Gatsby</a>
+            <a href="https://www.gatsbyjs.org">Gatsby</a>,
+            {` `}
+            <a href="https://code.visualstudio.com/">VSCode</a>,
+            {` `}
+            <a href="https://www.gentoo.org">Gentoo</a>,
+            {` `}
+            <a href="https://aws.amazon.com/amplify/">Amplify</a>,
+            {` and `}
+            <a href="https://reactjs.org/">React</a><br />
+            © 2008 to {new Date().getFullYear()} Antony Jepson  
           </footer>
         </div>
       </>
