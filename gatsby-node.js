@@ -22,6 +22,7 @@ exports.createPages = ({ actions, graphql }) => {
         edges {
           node {
             frontmatter {
+              updated
               path
             }
           }
@@ -41,4 +42,19 @@ exports.createPages = ({ actions, graphql }) => {
       })
     })
   })
+}
+
+// https://www.gatsbyjs.org/docs/schema-customization/
+
+exports.sourceNodes = ({ actions, schema }) => {
+  const { createTypes } = actions
+  createTypes(`
+    type MarkdownRemarkFrontMatter {
+      updated: Date
+    }
+
+    type MarkdownRemark implements Node {
+      frontmatter: MarkdownRemarkFrontMatter
+    }
+  `)
 }
