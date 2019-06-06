@@ -36,6 +36,8 @@ const Layout = ({ children }) => (
         >
           <main>{children}</main>
           <footer>
+            <br />
+            <hr />
             Built with
             {` `}
             <a href="https://www.gatsbyjs.org">Gatsby</a>,
