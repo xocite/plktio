@@ -2,7 +2,8 @@ import React from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { graphql } from "gatsby"
+
+import { graphql, Link } from "gatsby"
 
 export default ({ data }) => {
   return (
@@ -12,7 +13,7 @@ export default ({ data }) => {
       <p>I've written {data.allMarkdownRemark.totalCount} posts in 2019.</p>
       {data.allMarkdownRemark.edges.map(({ node }) => (
         <div key={node.id}>
-          <strong>{node.frontmatter.title}</strong> on {node.frontmatter.date}
+          <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link> on {node.frontmatter.date}
         </div>
       )
       )}
@@ -29,6 +30,7 @@ export const query = graphql`
           id
           frontmatter {
             title
+            path
             date(formatString: "DD MMMM YYYY")
           }
           }
