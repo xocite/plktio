@@ -15,8 +15,8 @@ export default function Template({
     <div className="blog-post-container">
       <div className="blog-post">
         <h1>{frontmatter.title}</h1>
-        <h5>Updated &raquo; {frontmatter.updated}</h5>
-        <h5>Published &raquo; {frontmatter.date}</h5>
+        Updated &raquo; {frontmatter.updated} | Published &raquo; {frontmatter.date}
+        <br /><br />
         <div
           className="blog-post-content"
           dangerouslySetInnerHTML={{ __html: html }}
