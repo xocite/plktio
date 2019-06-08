@@ -1,5 +1,5 @@
 ---
-path: "/building-my-new-home"
+path: "/writing/building-my-new-home"
 date: "2019-05-31"
 title: "Building my new home on the web"
 updated: "2019-06-06"
