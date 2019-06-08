@@ -20,7 +20,7 @@ export default () => (
     }
   `}
   render={data => (
-    <div className={navigationStyles.navbar}>
+    <nav className={navigationStyles.navbar}>
     <ul className={navigationStyles.navbar}>
       {data.allNavpagesYaml.edges.map( ({ node }) => (
         <li  key={node.id}>
@@ -29,7 +29,7 @@ export default () => (
       )
       )}
     </ul>
-    </div>
+    </nav>
   )
   }
   />
