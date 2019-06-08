@@ -1,0 +1,11 @@
+.navbar {
+  
+}
+.navbar ul {
+  list-style-type: none;
+}
+
+.navbar li {
+  display: inline;
+  padding-right: 10px;
+}

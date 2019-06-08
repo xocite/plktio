@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Link, StaticQuery, graphql } from 'gatsby'
 
+import navigationStyles from './navigation.module.css'
+
 export default () => (
   <StaticQuery
   query={graphql`
@@ -18,14 +20,16 @@ export default () => (
     }
   `}
   render={data => (
-    <ul>
+    <div className={navigationStyles.navbar}>
+    <ul className={navigationStyles.navbar}>
       {data.allNavpagesYaml.edges.map( ({ node }) => (
-        <li key={node.id}>
+        <li  key={node.id}>
           <Link to={node.link}>{node.title}</Link>
         </li>
       )
       )}
     </ul>
+    </div>
   )
   }
   />
