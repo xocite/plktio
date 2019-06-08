@@ -9,14 +9,10 @@ const Header = ({ siteTitle }) => (
   <header>
     <div className={headerStyles.container}>
       <h1>
-        <Link
-          to="/"
-        >
-          plkt.io
-        </Link>
+        <Link to="/"> plkt.io </Link>
       </h1>
+      <Navigation />
     </div>
-    <Navigation />
   </header>
 )
 
