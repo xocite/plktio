@@ -12,6 +12,7 @@ import { StaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 import LayoutStyles from "./layout.module.css"
+import GitDetails from "./git_details";
 
 const Layout = ({ children }) => (
   <StaticQuery
@@ -29,7 +30,7 @@ const Layout = ({ children }) => (
         <Header siteTitle={data.site.siteMetadata.title} />
         <div className={LayoutStyles.container}>
           <main>{children}</main>
-          <footer>
+          <footer><small>
             <br />
             <hr />
             Built with
@@ -43,8 +44,8 @@ const Layout = ({ children }) => (
             <a href="https://aws.amazon.com/amplify/">Amplify</a>,
             {` and `}
             <a href="https://reactjs.org/">React</a><br />
-            © 2008 to {new Date().getFullYear()} Antony Jepson  
-          </footer>
+            © 2008 to {new Date().getFullYear()} Antony Jepson <GitDetails />
+          </small></footer>
         </div>
       </>
     )}
