@@ -9,13 +9,19 @@ export default function Template({
 }) {
   const { markdownRemark } = data 
   const { frontmatter, html } = markdownRemark
+  var updated = ""
+  if (!frontmatter.updated) {
+    updated = ""
+  } else {
+    updated = "Updated » " + frontmatter.updated + " |"
+  }
   return (
     <Layout>
       <SEO title={frontmatter.title} />
     <div className="blog-post-container">
       <div className="blog-post">
         <h1>{frontmatter.title}</h1>
-        Updated &raquo; {frontmatter.updated} | Published &raquo; {frontmatter.date}
+        {updated} Published &raquo; {frontmatter.date}
         <br /><br />
         <div
           className="blog-post-content"
