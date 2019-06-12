@@ -138,7 +138,6 @@ Make sure you see the hash on the right side when you click "Run".
 ![](/images/cloudflare-edited-worker.png)
 
 # Step 3: Writing a React component to fetch the Cloudflare worker
-
 Finally, we'll update the code for the website to call the worker.  For this tutorial, we'll be building this into my existing codebase -- which means we'll be using React components with GatsbyJS.
 
 Open up VSCode in the folder for your website and create a new component entitled 'git\_details.js' under 'src/components'.
@@ -146,7 +145,6 @@ Open up VSCode in the folder for your website and create a new component entitle
 ![](/images/vscode-add-git-details.png)
 
 We'll need to keep the following in mind:
-
 * We're building a React component class that performs network activity, so we'll need to keep the network activitiy inside the componentDidMount() function.  More details on the [React documentation](https://reactjs.org/docs/react-component.html#constructor).
 * We don't want the hash to unexpectantly appear on the page so we'll set a default value in the constructor.
 
@@ -193,7 +191,6 @@ Now, running this locally, we can see the result working.
 That's it for including the Git commit hash on your deployment using serverless functions.
 
 # Recap
-
 To recap:
 
 * We retrieved our personal access token from GitHub because authenticated users have an increased rate limit of 6,000 requests an hour.
