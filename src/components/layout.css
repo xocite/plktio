@@ -85,7 +85,7 @@ sup {
   top: -0.5em;
 }
 img {
-  border-style: none;
+  border-style: solid;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -95,7 +95,7 @@ kbd,
 pre,
 samp {
   font-family: monospace, monospace;
-  font-size: 1em;
+  font-size: 0.9em;
 }
 figure {
   margin: 1em 40px;

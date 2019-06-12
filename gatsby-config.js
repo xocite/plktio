@@ -23,7 +23,33 @@ module.exports = {
         path: `${__dirname}/src/posts`,
       }
     },
-    `gatsby-transformer-remark`,
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          { 
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: `650`,
+              linkImagesToOriginal: true,
+              showCaptions: true,
+              wrapperStyle: "border-style: solid;",
+            }
+          },
+          {
+            resolve: `gatsby-remark-prismjs`,
+          }
+        ]
+      }
+    },
+    {
+      resolve: `gatsby-remark-images`,
+      options: {
+        maxWidth: `1024`,
+        linkImagesToOriginal: true,
+        showCaptions: true,
+      }
+    },
     `gatsby-transformer-yaml`,
     {
       resolve: `gatsby-source-filesystem`,
