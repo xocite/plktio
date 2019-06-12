@@ -145,7 +145,7 @@ Open up VSCode in the folder for your website and create a new component entitle
 ![](/images/vscode-add-git-details.png)
 
 We'll need to keep the following in mind:
-* We're building a React component class that performs network activity, so we'll need to keep the network activitiy inside the componentDidMount() function.  More details on the [React documentation](https://reactjs.org/docs/react-component.html#constructor).
+* We're building a React component class that performs network activity, so we'll need to keep the network activity inside the `componentDidMount()` function.  More details on the [React documentation](https://reactjs.org/docs/react-component.html#constructor).
 * We don't want the hash to unexpectantly appear on the page so we'll set a default value in the constructor.
 
 The final class looks something like this:
