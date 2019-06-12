@@ -3,6 +3,10 @@ path: "/writing/using-serverless-github-hash"
 date: "2019-06-12"
 title: "Showing the commit version of your static site using serverless functions"
 ---
+ 
+![](/images/macbook_goran_ivos.jpg)
+Photo by [Goran Ivos](https://unsplash.com/@goran_ivos) on [Unsplash](https://unsplash.com/search/photos/code)
+
 The Git ecosystem is pretty amazing and I'm grateful that it exists.  In this tutorial, I'll be showing you how I added the Git commit hash to the bottom of the website.  This is the first step on enabling versioning history on the site and we'll build the MVP using the Cloudflare Workers "workers.dev" free tier.
 
 This tutorial consists of:
@@ -38,7 +42,7 @@ Click **Create a Worker**.  Now you will see a very simple (and working!) Cloudf
 
 You can test the template by clicking **Save and deploy** and then issuing `curl <worker address>` in a terminal or opening the address in a web browser.
 
-```sh
+```
 $ curl blue-union-3e08.plktio.workers.dev
 
 hello world
