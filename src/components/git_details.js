@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 
 const GitDetails = () => {
   const initialState = JSON.parse('{"htmlUrl": "", "hash": ""}')
