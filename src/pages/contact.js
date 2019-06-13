@@ -9,7 +9,8 @@ const Contact = () => (
     <h1>Contact</h1>
     <p>For inquiries about existing or future suggested writing topics: email "a" at this website.</p>
     <p>For professional inquiries: LinkedIn <i><a href="https://www.linkedin.com/in/antony-jepson">Antony Jepson</a></i>.</p>
-    <p>For everything else, Twitter: <a href="https://twitter.com/plktio">@plktio</a>.</p>
+    <p>For mentions, Twitter: <a href="https://twitter.com/plktio">@plktio</a>.</p>
+    <p>And for code, GitHub: <a href="https://github.com/xocite">xocite</a>.</p>
   </Layout>
 )
 
