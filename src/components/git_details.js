@@ -1,7 +1,8 @@
 import React, { Component, useState, useEffect } from "react"
 
 const GitDetails = () => {
-  const [hash, setHash] = useState("Fetching hash...")
+  const initialState = JSON.parse('{"htmlUrl": "", "hash": ""}')
+  const [result, setResult] = useState(initialState)
 
   useEffect(() => {
     fetch(
@@ -9,12 +10,20 @@ const GitDetails = () => {
       { method: 'GET' }
     )
     .then(response => response.text())
-    .then(data => setHash(data))
-  })
+    .then(data => {
+      try {
+        setResult(JSON.parse(data))
+      } catch(error) { // Cached version of Cloudflare worker is used
+        const jsonData = JSON.parse('{"htmlUrl": "", "hash": data}')
+        setResult(jsonData)
+      }
+      
+    })
+  }, [])
 
   return (
     <div>
-      {hash}
+      <a href={result.htmlUrl}>{result.hash}</a>
     </div>
   )
 }
