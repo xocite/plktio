@@ -11,6 +11,7 @@ import { StaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
 import "./layout.css"
+import "./prismjs-custom-theme.css"
 import LayoutStyles from "./layout.module.css"
 import GitDetails from "./git_details";
 
