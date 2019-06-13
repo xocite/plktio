@@ -22,7 +22,7 @@ This tutorial consists of:
 3. Writing a React component to fetch the Cloudflare worker
 4. **Bonus** Rewriting the React component using React hooks
 
-# Step 1: Generating a personal access token on GitHub
+## Step 1: Generating a personal access token on GitHub
 Head on over to <https://github.com/settings/tokens> to create your personal access token.  This will be needed to increase our rate limit from the default access of 60 requests an hour per IP address to the authenticated access which allows 5,000 requests per hour.
 
 ![](/images/github-personal-access-tokens.png)
@@ -37,7 +37,7 @@ Scroll down and select **Generate token**.
 
 Copy this value as we'll need it in the next section.
 
-# Step 2: Writing the serverless Cloudflare worker
+## Step 2: Writing the serverless Cloudflare worker
 
 In another tab, open up [workers.dev](http://workers.dev) and log in.   You'll be presented with a start page.
 
@@ -149,7 +149,7 @@ Make sure you see the hash on the right side when you click "Run".
 
 ![](/images/cloudflare-edited-worker.png)
 
-# Step 3: Writing a React component to fetch the Cloudflare worker
+## Step 3: Writing a React component to fetch the Cloudflare worker
 Finally, we'll update the code for the website to call the worker.  For this tutorial, we'll be building this into my existing codebase -- which means we'll be using React components with GatsbyJS.
 
 Open up VSCode in the folder for your website and create a new component entitled 'git\_details.js' under 'src/components'.
@@ -202,7 +202,7 @@ Now, running this locally, we can see the result working.
 
 That's it for including the Git commit hash on your deployment using serverless functions.
 
-# Step 4: Rewriting the React component using React hooks
+## Step 4: Rewriting the React component using React hooks
 We can make our Cloudflare worker even simpler by using React hooks.  They allow you to write simple functions instead of using classes.  Additionally, managing the state of the component is easier than using classes.  You can read more about them on the [React blog](https://reactjs.org/docs/hooks-intro.html).
 
 In our original class, we set the state in the constructor.  With React hooks, we'll set the state in the beginning of the function instead.
@@ -278,7 +278,7 @@ export default GitDetails
 
 React hooks are easy to use and make it easier to debug your code so I encourage you to use them when writing new code.
 
-# Recap
+## Recap
 To recap:
 
 * We retrieved our personal access token from GitHub because authenticated users have an increased rate limit of 5,000 requests an hour.
