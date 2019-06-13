@@ -1,27 +1,21 @@
-import React, { Component } from "react"
+import React, { Component, useState, useEffect } from "react"
 
-class GitDetails extends Component {
-  constructor(props) {
-    super(props)
+const GitDetails = () => {
+  const [hash, setHash] = useState("Fetching hash...")
 
-    this.state = { data: "Fetching hash...", }
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     fetch(
       'https://blue-union-3e08.plktio.workers.dev/',
       { method: 'GET' }
     )
     .then(response => response.text())
-    .then(data => this.setState({ data }))
-  }
+    .then(data => setHash(data))
+  })
 
-  render() {
-    const { data } = this.state
-    return (
-      <div>{data}</div>
-    )
-  }
+  return (
+    <div>
+      {hash}
+    </div>
+  )
 }
-
 export default GitDetails
