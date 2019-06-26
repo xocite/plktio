@@ -42,10 +42,12 @@ template {
 a {
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
+  text-decoration: none;
 }
 a:active,
 a:hover {
   outline-width: 0;
+  text-decoration: underline;
 }
 abbr[title] {
   border-bottom: none;
@@ -69,7 +71,7 @@ mark {
   color: #000;
 }
 small {
-  font-size: 80%;
+  font-size: 90%;
 }
 sub,
 sup {
@@ -185,7 +187,7 @@ textarea {
   font: inherit;
 }
 html {
-  font: 100%/1.45em georgia, serif;
+  font: 100%/1.45em sans-serif;
   box-sizing: border-box;
   overflow-y: scroll;
 }
