@@ -1,6 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
-import favicon from './images/favicon.ico';
+import favicon from './images/favicon.ico'
+import Amplify, { Analytics } from 'aws-amplify'
+import awsconfig from './aws-exports'
+
+Amplify.configure(awsconfig)
 
 export default function HTML(props) {
   return (
