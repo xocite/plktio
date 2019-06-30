@@ -7,7 +7,6 @@ import headerStyles from "./header.module.css"
 
 import Analytics from '@aws-amplify/analytics'
 import Auth from '@aws-amplify/auth'
-import aws_exports from "../aws-exports.js"
 
 const amplifyConfig = {
   Auth: {
