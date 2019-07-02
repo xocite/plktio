@@ -24,7 +24,7 @@ export default () => (
     <ul className={navigationStyles.navbar}>
       {data.allNavpagesYaml.edges.map( ({ node }) => (
         <li  key={node.id}>
-          <Link to={node.link}>{node.title}</Link>
+          <Link to={node.link}> {node.title}&nbsp;</Link>
         </li>
       )
       )}
