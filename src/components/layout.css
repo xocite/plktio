@@ -87,7 +87,7 @@ sup {
   top: -0.5em;
 }
 img {
-  border-style: solid;
+  border-style: none;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -220,7 +220,7 @@ img {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
+  margin-bottom: 0rem;
 }
 h1 {
   margin-left: 0;
