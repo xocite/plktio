@@ -49,8 +49,8 @@ exports.createPages = ({ actions, graphql }) => {
 exports.sourceNodes = ({ actions, schema }) => {
   const { createTypes } = actions
   createTypes(`
-    type MarkdownRemarkFrontMatter {
-      updated: Date
+    type MarkdownRemarkFrontMatter @infer {
+      updated: Date @dateformat
       attract: String
     }
 
