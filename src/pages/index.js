@@ -2,6 +2,7 @@ import React from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import containerStyles from "../components/index.module.css"
 
 import { graphql, Link } from "gatsby"
 
@@ -10,11 +11,16 @@ export default ({ data }) => {
     <Layout>
       <SEO title="Home" />
       <h3>Hi <span role="img" aria-label="Waving hand">👋</span>  I’m Antony, a technical product manager.  I help you build quality products.</h3>
-      <p>I've written {data.allMarkdownRemark.totalCount} posts since July 2019.</p>
+      <p>Read my most recent posts below.</p>
       {data.allMarkdownRemark.edges.map(({ node }) => (
-        <div key={node.id}>
-          <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link> on {node.frontmatter.date}
-        </div>
+        <dl key={node.id}>
+          <dt>
+            {node.frontmatter.date}
+            <br />
+            <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link>
+          </dt>
+          <dd>{node.frontmatter.attract}</dd>
+        </dl>
       )
       )}
       <br />
@@ -34,6 +40,7 @@ export const query = graphql`
             title
             path
             date(formatString: "DD MMMM YYYY")
+            attract
           }
         }
       }
