@@ -15,14 +15,7 @@ export default ({ data }) => {
       {data.allMarkdownRemark.edges.map(({ node }) => (
         <dl key={node.id}>
           <dt>
-            {node.frontmatter.date}
-            <br />
-            {
-              (node.frontmatter.commentary) ?
-              <></>
-              : <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link>
-
-            }
+            {node.frontmatter.date}: <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
           </dt>
           <dd>
             {
