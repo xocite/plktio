@@ -6,8 +6,6 @@ import twitter from "../images/twitter.png"
 import github from "../images/github-32px.png"
 import linkedin from "../images/linkedin.png"
 
-console.log(contactStyles)
-
 const Contact = () => (
   <Layout>
     <SEO title="Contact Antony" />
