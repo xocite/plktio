@@ -1,7 +1,7 @@
 ---
 path: "/writing/adding-disk-to-md-array"
 date: "2019-06-26"
-title: "Adding a new disk to an existing RAID array on Linux"
+title: "Adding a new disk to an existing RAID on Linux"
 ---
 I run a small [Samba](https://www.samba.org/) server at home that I use to store high-fidelity music and photos.  Right now it's based upon a RAID 1 mirrored pair which means I can only withstand a single disk failure before losing my data.
 
