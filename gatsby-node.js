@@ -51,6 +51,7 @@ exports.sourceNodes = ({ actions, schema }) => {
   createTypes(`
     type MarkdownRemarkFrontMatter {
       updated: Date
+      attract: String
     }
 
     type MarkdownRemark implements Node {
