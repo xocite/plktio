@@ -19,7 +19,7 @@ export default ({ data }) => {
             <br />
             {
               (node.frontmatter.commentary) ?
-              
+              <></>
               : <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link>
 
             }
