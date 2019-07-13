@@ -3,7 +3,7 @@ path: "/writing/using-serverless-github-hash"
 date: "2019-06-12"
 title: "Showing the commit version on your static site using serverless functions"
 updated: "2019-06-13"
-attract: "A very quick and easy to follow serverless example."
+attract: "A quick serverless example."
 ---
 <!-- main -->
 | Update history | |
