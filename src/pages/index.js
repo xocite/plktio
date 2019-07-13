@@ -17,9 +17,23 @@ export default ({ data }) => {
           <dt>
             {node.frontmatter.date}
             <br />
-            <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link>
+            {
+              (node.frontmatter.commentary) ?
+              
+              : <Link to={node.frontmatter.path}><strong>{node.frontmatter.title}</strong></Link>
+
+            }
           </dt>
-          <dd>{node.frontmatter.attract}</dd>
+          <dd>
+            {
+              (node.frontmatter.commentary) ?
+              <div
+                className="commentary-content"
+                dangerouslySetInnerHTML={{ __html: (node.html) }}
+              />
+              : (node.frontmatter.attract)
+            }
+          </dd>
         </dl>
       )
       )}
@@ -41,7 +55,9 @@ export const query = graphql`
             path
             date(formatString: "DD MMMM YYYY")
             attract
+            commentary
           }
+          html
         }
       }
     }

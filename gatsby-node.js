@@ -52,6 +52,7 @@ exports.sourceNodes = ({ actions, schema }) => {
     type MarkdownRemarkFrontMatter @infer {
       updated: Date @dateformat
       attract: String
+      commentary: Boolean
     }
 
     type MarkdownRemark implements Node {
