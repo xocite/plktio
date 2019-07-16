@@ -7,6 +7,7 @@ import headerStyles from "./header.module.css"
 
 import Analytics from '@aws-amplify/analytics'
 import Auth from '@aws-amplify/auth'
+import ImageLogo from '../images/favicon.jpg'
 
 const amplifyConfig = {
   Auth: {
@@ -33,8 +34,9 @@ Analytics.configure(analyticsConfig)
 const Header = ({ siteTitle }) => (
   <header>
     <div className={headerStyles.container}>
+      <img className={headerStyles.logo} src={ImageLogo} alt="plkt.io logo" />
       <h1>
-        <Link to="/"> plkt.io </Link>
+        <Link to="/">plkt.io</Link>
       </h1>
       <Navigation />
     </div>
