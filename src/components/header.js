@@ -34,7 +34,7 @@ Analytics.configure(analyticsConfig)
 const Header = ({ siteTitle }) => (
   <header>
     <div className={headerStyles.container}>
-      <img className={headerStyles.logo} src={ImageLogo} alt="plkt.io logo" />
+      <Link to="/"><img className={headerStyles.logo} src={ImageLogo} alt="plkt.io logo" /></Link>
       <h1>
         <Link to="/">plkt.io</Link>
       </h1>
