@@ -7,7 +7,7 @@
 }
 
 .navbar li {
-  display: inline;
+  display: inline-flex;
   padding-right: 10px;
 }
 
