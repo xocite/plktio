@@ -6,7 +6,7 @@ updated: "2019-07-19"
 commentary: false
 attract: "Our future will be a multi-device commonality."
 ---
-**In Progress Stream of Conciousness Writing**
+**In Progress Stream of Consciousness Writing**
 
 I believe that the future of computing is multi-device.
 
