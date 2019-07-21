@@ -4,12 +4,14 @@ import { Link, StaticQuery, graphql } from 'gatsby'
 import { useStaticQuery } from 'gatsby'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Img from "gatsby-image"
 
 const Bookshelf = () => {
   const [ isDisplayingLinks, displayLinks ] = useState(false)
   const [ isDisplayingAuthor, displayAuthor ] = useState(true)
   const [ isDisplayingFullTitle, displayFullTitle ] = useState(false)
   const [ isDisplayingComment, displayComment ] = useState(true)
+  const [ isDisplayBookCover, displayCover ] = useState(true)
 
   const books = useStaticQuery(
     graphql`
@@ -20,6 +22,13 @@ const Bookshelf = () => {
               title
               author
               subtitle
+              image {
+                childImageSharp {
+                  fixed(width: 100) {
+                    ...GatsbyImageSharpFixed
+                  }
+                }
+              }
               amazon
               goodreads
               comment
@@ -40,10 +49,20 @@ const Bookshelf = () => {
       <button onClick={() => displayAuthor(!isDisplayingAuthor)}>Toggle author name</button>
       <button onClick={() => displayLinks(!isDisplayingLinks)}>Toggle Amazon/Goodreads links</button>
       <button onClick={() => displayComment(!isDisplayingComment)}>Toggle comments</button>
+      <button onClick={() => displayCover(!isDisplayBookCover)}>Toggle book cover</button>
       <p></p>
-      <ul>
+      <table>
         {books.allBooksYaml.edges.map( ({ node }) => (
-          <li key={node.id}><strong>{node.title}</strong>
+          <tr key={node.id}>
+          {
+            isDisplayBookCover ?
+              <>
+                <td><Img fixed={node.image.childImageSharp.fixed} /></td>
+              </>
+            : null
+          }
+          <td>
+          <strong>{node.title}</strong>
           {
             isDisplayingFullTitle ?
               <>
@@ -73,10 +92,11 @@ const Bookshelf = () => {
               </>
             : null
           }
-          </li>
+          </td>
+          </tr>
         )
         )}
-      </ul>
+      </table>
     </Layout>    
   )
 
