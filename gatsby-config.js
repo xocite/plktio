@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `plkt.io`,
-    description: `The best way to see and get involved in Antony Jepson is doing.`,
+    description: `The best way to see and get involved in what Antony Jepson is doing.`,
     author: `@plktio`,
   },
   pathPrefix: `/blog`,
