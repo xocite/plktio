@@ -7,9 +7,9 @@ import SEO from "../components/seo"
 import Img from "gatsby-image"
 
 const Bookshelf = () => {
-  const [ isDisplayingLinks, displayLinks ] = useState(false)
+  const [ isDisplayingLinks, displayLinks ] = useState(true)
   const [ isDisplayingAuthor, displayAuthor ] = useState(true)
-  const [ isDisplayingFullTitle, displayFullTitle ] = useState(false)
+  const [ isDisplayingFullTitle, displayFullTitle ] = useState(true)
   const [ isDisplayingComment, displayComment ] = useState(true)
   const [ isDisplayBookCover, displayCover ] = useState(true)
 
