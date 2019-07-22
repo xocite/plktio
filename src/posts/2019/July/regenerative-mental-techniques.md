@@ -1,7 +1,7 @@
 ---
 path: "/writing/regenerative-mental-techniques"
 date: "2019-07-21"
-title: "Regenerative Mental Techniques"
+title: "Regenerative mental techniques"
 link: 
 updated:
 commentary: false
