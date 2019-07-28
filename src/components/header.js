@@ -36,7 +36,7 @@ const Header = ({ siteTitle }) => (
     <div className={headerStyles.container}>
       <Link to="/"><img className={headerStyles.logo} src={ImageLogo} alt="plkt.io logo" /></Link>
       <h1>
-        <Link to="/">plkt.io</Link>
+        <Link to="/">Antony Jepson</Link>
       </h1>
       <Navigation />
     </div>
