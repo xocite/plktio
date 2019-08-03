@@ -5,7 +5,10 @@ updated: "2019-07-26"
 title: "Links"
 attract: "Share the enjoyment I've had on things I've watched, read, or listened to recently."
 ---
-Here is a continuously growing list of things I've found interesting to watch, read, or listen to since July 2019.  This page will grow over time, so keep an eye on the update date.  Let me know if you enjoyed any of these or have anything interesting to share.
+Here is a continuously growing list of things I've found interesting to watch,
+read, or listen.  This page will grow over time, so keep an eye on the update
+date.  Let me know if you enjoyed any of these or have anything interesting to
+share.
 
 ### July
 * [Patches carved into developer
