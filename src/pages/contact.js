@@ -12,6 +12,7 @@ const Contact = () => (
     <h1>Contact and employment</h1>
     <p>I am available for immediate employment for product manager and software engineer positions, both remote and in United Kingdom.  Outside of the UK, I am willing to relocate and will likely need a work visa.  Locations of interest include: Hong Kong, Singapore, Thailand (Bangkok), United States, and Budapest.</p>
     <p>I want to help you build great products and also make sure we will be a good fit &mdash; so please include complete details on the position, your company, your role, and the customer problem being solved.</p>
+    <h2>Getting in touch</h2>
     <p>Here are some ways you can reach me.</p>
     <ul>
       <li>
@@ -32,8 +33,9 @@ const Contact = () => (
         </li>
       </ul>
     </ul>
+    <h2>Resume</h2>
     Learn more about my skillset by looking at my <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11.pdf">resume</a>.
-    <br />
+    <br /><br />
     <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11.pdf"><img src="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11-150px.jpg" alt="Antony Jepson resume thumbnail" /></a>
   </Layout>
 )
