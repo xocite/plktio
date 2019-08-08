@@ -48,7 +48,7 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  siteTitle: `plkt.io`,
+  siteTitle: `Antony Jepson`,
 }
 
 export default Header
