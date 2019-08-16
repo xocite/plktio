@@ -46,12 +46,15 @@ My preferred virtualisation solution in VMWare.  I'm sure these instructions als
 
 We'll get started by registering for a [Red Hat Developer](https://developers.redhat.com) account.  This gives us a free evaluation license to download the latest Red Hat version.
 
-Once you have signed up, you will also have an account at [Red Hat Access](https://access.redhat.com/).  Navigate there and go to Products & Servies > Red Hat Enterprise Linux.  Click on "Download version 8" and download the Boot ISO: Red Hat Enterprise Linux 8.0 Boot ISO.  You can optionally download the KVM image as well which I believe is a more recent build.
+Once you have signed up, you will also have an account at [Red Hat Access](https://access.redhat.com/).  Navigate there and go to Products & Servies > Red Hat Enterprise Linux.  Click on "Download version 8" and download the Boot ISO: Red Hat Enterprise Linux 8.0 Boot ISO.  You will also need to download the DVD "Red Hat Enterprise Linux 8.0 Binary DVD " and make it accessible somewhere.
 
 Once you have the boot ISO downloaded, load it in your virtualisation product of choice and we can begin.
 
 # Installing Red Hat
-TBD
+Set up a virtual machine and boot the installer.  I created a simple VM with 2 cores, 2568MB of RAM, and 20GB root drive.
+
+
+Use the default settings.
 
 # Essential tools
 I imagine this is the easiest thing to learn but the part that trips up most people.  From the exam guidelines, we'll cover:
