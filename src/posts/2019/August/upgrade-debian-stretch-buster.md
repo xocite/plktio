@@ -83,8 +83,8 @@ Check for any errors.
 Update your package repositories by changing all occurences of `stretch` to
 `buster` in `/etc/apt/sources.list`.
 
-Finally, run the apt update/upgrade/dist-upgrade commands again and you should be all
-set.
+Finally, run the apt update/upgrade/dist-upgrade commands again and you should
+be all set.
 
 Reboot and test the new system.  If there are no errors, you can remove the
 snapshot.
