@@ -1,17 +1,17 @@
 ---
-path: "/writing/redhat-csa-rhcsa-prep"
+path: "/writing/redhat-csa-rhcsa-prep-p1"
 date: "2019-08-17"
-title: "(WIP) Red Hat Certified System Administrator Exam Prep"
+title: "Red Hat Certified System Administrator Exam Prep: Part 1"
 commentary: false
-attract: "Here are all the notes took when preparing for the RHCSA exam."
+attract: "Part 1 of the RHCSA prep series."
 ---
 **Keywords: rhsca, preparation, exam, linux, system administrator**
 
-If you're here then you must be preparing for the [Red Hat Certified System Administrator](https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam) exam.  These are the notes I took prior to taking the exam.  I took these notes over the course of a week.  I have been using Linux for over a decade so this may not be completely comprehensive.
+If you're here then you must be preparing for the [Red Hat Certified System Administrator](https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam) exam.  These are the notes I took prior to taking the exam.  It consists of many parts and once complete I'll include links to every page.
 
 Please note that I haven't sat the exam yet so this document is a work in progress.
 
-# Task requirements
+# Exam overview
 From the [official documentation](https://www.redhat.com/en/services/certification/rhcsa) you should be able to perform the following:
 * Understand and use essential tools for handling files, directories, commandline environments, and documentation. *Essential tools*
 * Operate running systems including booting into different run levels, identifying processes, starting and stopping virtual machines, and controlling services. *Operating running systems*
