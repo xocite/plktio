@@ -1,6 +1,6 @@
 ---
 path: "/writing/redhat-csa-rhcsa-prep-p1"
-date: "2019-08-17"
+date: "2019-08-20"
 title: "Red Hat Certified System Administrator Exam Prep: Part 1"
 commentary: false
 attract: "Part 1 of the RHCSA prep series."
@@ -44,7 +44,7 @@ For a job in the UK
 From this we can see that network fundamentals are very important outside of what's already listed in the RHCSA exam requirements.
 
 # Development environment
-My preferred virtualisation solution in VMWare.  I'm sure these instructions also run on VirtualBox and Parallels, if on a Mac, and KVM in Linux.
+My preferred virtualisation solution is VMWare.  I'm sure these instructions also run on VirtualBox and Parallels, if on a Mac, and KVM in Linux.
 
 We'll get started by registering for a [Red Hat Developer](https://developers.redhat.com) account.  This gives us a free evaluation license to download the latest Red Hat version.
 
@@ -73,7 +73,6 @@ You'll have the opportunitity to creata a user account and root password.  Make 
 
 ![](./images/rhcsa-vm-installation-5.png)
 ![](./images/rhcsa-vm-installation-6.png)
-
 
 Once the installation is complete, make a clone of the image as you'll need to create more of them later on in the exam preparation process.  Write down the user name you created as well as the password because you'll be referencing these frequently.
 
