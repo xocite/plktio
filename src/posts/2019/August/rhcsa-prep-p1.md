@@ -11,6 +11,8 @@ If you're here then you must be preparing for the [Red Hat Certified System Admi
 
 Please note that I haven't sat the exam yet so this document is a work in progress.
 
+In this part, we'll walk through what will be covered in the exam and then install Red Hat Linux using the Developer free license.
+
 # Exam overview
 From the [official documentation](https://www.redhat.com/en/services/certification/rhcsa) you should be able to perform the following:
 * Understand and use essential tools for handling files, directories, commandline environments, and documentation. *Essential tools*
@@ -46,29 +48,35 @@ My preferred virtualisation solution in VMWare.  I'm sure these instructions als
 
 We'll get started by registering for a [Red Hat Developer](https://developers.redhat.com) account.  This gives us a free evaluation license to download the latest Red Hat version.
 
-Once you have signed up, you will also have an account at [Red Hat Access](https://access.redhat.com/).  Navigate there and go to Products & Servies > Red Hat Enterprise Linux.  Click on "Download version 8" and download the Boot ISO: Red Hat Enterprise Linux 8.0 Boot ISO.  You will also need to download the DVD "Red Hat Enterprise Linux 8.0 Binary DVD " and make it accessible somewhere.
+Once you have signed up, you will also have an account at [Red Hat Access](https://access.redhat.com/).  Navigate there and go to Products & Servies > Red Hat Enterprise Linux.  Click on "Download version 8" and download the Boot ISO: Red Hat Enterprise Linux 8.0 Boot ISO.  You will also need to download the DVD "Red Hat Enterprise Linux 8.0 Binary DVD " and make it accessible somewhere on a network share.
 
 Once you have the boot ISO downloaded, load it in your virtualisation product of choice and we can begin.
 
 # Installing Red Hat
 Set up a virtual machine and boot the installer.  I created a simple VM with 2 cores, 2568MB of RAM, and 20GB root drive.
 
-
 Use the default settings.
 
-# Essential tools
-I imagine this is the easiest thing to learn but the part that trips up most people.  From the exam guidelines, we'll cover:
-* Access a shell prompt and issue commands with correct syntax
-* Use input-output redirection (>, >>, |, 2> , etc.)
-* Use grep and regular expressions to analyse text
-* Access remote systems using SSH
-* Log in and switch users in multiuser targets
-* Archive, compress, unpack, and uncompress files using tar, star, gzip, and bzip2
-* Create and edit text files
-* Create, delete, copy, and move files and directories
-* Create hard and soft links
-* List, set, and change standard ugo/rwx permissions
-* Locate, read, and use system documentation including man, info, and files in /usr/share/doc
+![](./images/rhcsa-vm-installation-1.png)
 
-# Before you enter the testing site
-Watch this video: https://www.youtube.com/watch?v=tok9qimRw6k 
+![](./images/rhcsa-vm-installation-2.png)
+
+You'll be prompted for the DVD location.  Enter it according to where you have it stored on your NFS share.
+
+![](./images/rhcsa-vm-installation-3.png)
+
+Everything else should have automatically been configured.  I selected [Base Environment]: Server and [Add-ons for Selected Environment]: File and Storage server.  Go ahead and begin the installation.
+
+![](./images/rhcsa-vm-installation-4.png)
+
+You'll have the opportunitity to creata a user account and root password.  Make sure the user account is an administrator.
+
+![](./images/rhcsa-vm-installation-5.png)
+![](./images/rhcsa-vm-installation-6.png)
+
+
+Once the installation is complete, make a clone of the image as you'll need to create more of them later on in the exam preparation process.  Write down the user name you created as well as the password because you'll be referencing these frequently.
+
+![](./images/rhcsa-vm-installation-7.png)
+
+And now we're all logged in.  Part 2 will cover using essential system tools.
