@@ -55,7 +55,7 @@ Here are the most basic commands used in systems administration:
 * id: list user and group IDs
 * date: print the date
 
-### Manipulating the enviornment
+### Manipulating the environment
 * set: show shell variables
 * alias: create shell alias
 * env: show exported variables (from the parent process)
@@ -254,8 +254,20 @@ $
 ```
 
 # [ET.6] Archive, compress, unpack, and uncompress files using tar, star, gzip, and bzip2
+The tar command is the default and lauded command to package sets of files and directories together as well as compress them.  The default and preferred compression format is `bzip2`.  It can be used with tar or separately.
 
+## tar
+Modern day `tar` has sane defaults and an invocation with `xf` will usually decompress any file it can handle: `tar xf file`.
 
+More options:
+* `c`: create.  Usually followed by `f` to indicate the filename of the new tarball.
+* `x`: extract.
+* `a`: append
+* `d`: delete
+* `v`: verbose
+
+## bzip2
+If you receive a bzipped file, you can use bzip2 to decompress them in the current directory - which will result in a file named the same sans the bz2 extension.
 
 # [ET.7] Create and edit text files
 Become familiar with vi and ed just in case you are dropped into an emergency
@@ -277,8 +289,8 @@ simple `ln` creates hard links.  Hard links are essentially the same file so if
 you delete one you'll delete the other.  Soft links are a reference so you can
 delete the soft link without removing the target.
 
-I often get the order mixed up for linking files:
-
+I often get the order mixed up (TARGET vs LINK_NAME) for linking files:
+```
        ln - make links between files
 
 SYNOPSIS
@@ -288,8 +300,32 @@ SYNOPSIS
        ln [OPTION]... -t DIRECTORY TARGET...
 
        ln - make links between files
+```
 
-
+I fixed that problem by remembering that ln will create the link in the current directory if the link name is not specified.  That way you know that the link name is the 2nd argument.
 
 # [ET.10] List, set, and change standard ugo/rwx permissions
+There are a lot of tricks to changing permissions that are much easier than remembering the octals (777, for example).  You can directly reference the target `ugo` for user, group, and other respectively and then use an operator along with the permission to be affected.
+
+For example, to give the group permissions to read and write, you can issue: `chmod g+rw`.
+
+Listing permissions is given by `ls -l`.
+
+## Sticky bit
+Means that only the owner can delete the file.  Good for `/tmp` directories.
+
+## SUID/GUID
+Simply means that when the file in question is executed it will be executed with the permissions of the owner.  Can be checked by looking at `ls` output and seeing the `s` bit set in place of execute.  If it's a capital `S` then the execute bit hasn't been set.
+
+
 # [ET.11] Locate, read, and use system documentation including man, info, and files in /usr/share/doc
+For the exam, my goal is to generally avoid documentation where possible -- simply because I want to know the command well enough to go from memory.  That being said, you may blank of the order of options so I'd generally recommend to get bash-completion installed first and then go to the manpage.
+
+## Bash completion
+Can be installed with `yum install bash-completion`.
+
+## Man pages
+Man pages can be read with `man command`.  It's split into sections (see `man man`) and you'll probably only need to know sections 1 (executable programs), 5 (file formats), and 8 (system administration commands).
+
+## Info documents
+Consider info documents a newer, more comprehensive version of man pages.  Typically man pages will be enough to understand how to run the program but you'll find that GNU utilities have a very well written info document.  Open them with `info command`.
