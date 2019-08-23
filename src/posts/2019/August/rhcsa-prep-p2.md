@@ -7,8 +7,10 @@ attract: "Here are all the notes took when preparing for the RHCSA exam."
 ---
 **Keywords: rhsca, preparation, exam, linux, system administrator**
 
-This is part two of my RHCSA preparation series.   In this part, we'll cover the first exam objective: 
-* Understand and use essential tools for handling files, directories, commandline environments, and documentation. *Essential tools*
+This is part two of my RHCSA preparation series.   In this part, we'll cover the
+first exam objective: 
+* Understand and use essential tools for handling files, directories,
+  commandline environments, and documentation. *Essential tools*
 
 # Essential tools
 I imagine this is the easiest thing to learn but the part that trips up most people.  From the exam guidelines, we'll cover:
@@ -245,11 +247,49 @@ The main runlevel targets:
   even transition to the rescue runlevel.
 
 ## Switching users
-
+Switch users can be done using `su`.
+```
+$ su john
+$ 
+```
 
 # [ET.6] Archive, compress, unpack, and uncompress files using tar, star, gzip, and bzip2
+
+
+
 # [ET.7] Create and edit text files
+Become familiar with vi and ed just in case you are dropped into an emergency
+shell.
 # [ET.8] Create, delete, copy, and move files and directories
+You can reference ET.1 for some of the basic commands here.  Things to keep in
+mind:
+* mv has a backup command that is non-destructive.  Good for testing moves
+  before making them part of a shell script.
+* rm has an iteractive mode -- good for checking that recursive deletes won't
+  remove anything important
+* rm also has a -d flag which removes empty directories.
+* touch is the default command for creating files.  mkdir is the command for
+  creating directories.  You'll often use the -p option on mkdir to make a
+  nested set of directories.
 # [ET.9] Create hard and soft links
+`ln` is the tool of choice to create links.  `ln -s` creates soft links and
+simple `ln` creates hard links.  Hard links are essentially the same file so if
+you delete one you'll delete the other.  Soft links are a reference so you can
+delete the soft link without removing the target.
+
+I often get the order mixed up for linking files:
+
+       ln - make links between files
+
+SYNOPSIS
+       ln [OPTION]... [-T] TARGET LINK_NAME
+       ln [OPTION]... TARGET
+       ln [OPTION]... TARGET... DIRECTORY
+       ln [OPTION]... -t DIRECTORY TARGET...
+
+       ln - make links between files
+
+
+
 # [ET.10] List, set, and change standard ugo/rwx permissions
 # [ET.11] Locate, read, and use system documentation including man, info, and files in /usr/share/doc
