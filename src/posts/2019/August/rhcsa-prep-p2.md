@@ -1,9 +1,9 @@
 ---
 path: "/writing/redhat-csa-rhcsa-prep-p2"
 date: "2019-08-24"
-title: "Red Hat Certified System Administrator Exam Prep: Part 2"
+title: "Red Hat Certified System Administrator Exam Prep: Part 2: Essential Tools"
 commentary: false
-attract: "Here are all the notes took when preparing for the RHCSA exam."
+attract: "These are my RHCSA notes."
 ---
 **Keywords: rhsca, preparation, exam, linux, system administrator**
 
@@ -30,19 +30,19 @@ I imagine this is the easiest thing to learn but the part that trips up most peo
 ## Console
 The console is where you can receive output from the kernel and type commands to
 the kernel.  Navigating between consoles is typically done with `Ctrl+Alt+Fn`,
-where n is the number of the console.  Virtual consoles are accessed at the
+where n is the number of the console and F is one of the function keys.  Virtual consoles are accessed at the
 physical machine not remotely.  Graphical installations typically take place on
 console 6.
 
 ## Basic commands
 Here are the most basic commands used in systems administration:
 ### Navigation and file manipulation
-* ls: list directory contents
-* cd: change directory
-* rm: remove
-* mv: move
-* cp: copy
-* pwd: print working directory
+* `ls`: list directory contents
+* `cd`: change directory
+* `rm`: remove
+* `mv`: move
+* `cp`: copy
+* `pwd`: print working directory
 * mkdir: make directory
 * touch: make file
 * head: read first 10 lines of file
@@ -272,6 +272,7 @@ If you receive a bzipped file, you can use bzip2 to decompress them in the curre
 # [ET.7] Create and edit text files
 Become familiar with vi and ed just in case you are dropped into an emergency
 shell.
+
 # [ET.8] Create, delete, copy, and move files and directories
 You can reference ET.1 for some of the basic commands here.  Things to keep in
 mind:
@@ -283,6 +284,7 @@ mind:
 * touch is the default command for creating files.  mkdir is the command for
   creating directories.  You'll often use the -p option on mkdir to make a
   nested set of directories.
+
 # [ET.9] Create hard and soft links
 `ln` is the tool of choice to create links.  `ln -s` creates soft links and
 simple `ln` creates hard links.  Hard links are essentially the same file so if
