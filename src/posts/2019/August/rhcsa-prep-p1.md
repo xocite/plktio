@@ -1,7 +1,7 @@
 ---
 path: "/writing/redhat-csa-rhcsa-prep-p1"
 date: "2019-08-20"
-title: "Red Hat Certified System Administrator Exam Prep: Part 1"
+title: "Red Hat Certified System Administrator Exam Prep: Part 1: Overview"
 commentary: false
 attract: "Part 1 of the RHCSA prep series."
 ---
