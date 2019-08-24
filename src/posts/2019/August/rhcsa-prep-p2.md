@@ -1,19 +1,22 @@
 ---
 path: "/writing/redhat-csa-rhcsa-prep-p2"
 date: "2019-08-24"
-title: "Red Hat Certified System Administrator Exam Prep: Part 2: Essential Tools"
+title: "RHCSA Exam Prep: Part 2: Essential Tools"
 commentary: false
 attract: "These are my RHCSA notes."
 ---
 **Keywords: rhsca, preparation, exam, linux, system administrator**
 
-This is part two of my RHCSA preparation series.   In this part, we'll cover the
+This is part two of my [RHCSA](https://www.redhat.com/en/services/training/ex200-red-hat-certified-system-administrator-rhcsa-exam) preparation series.   In this part, we'll cover the
 first exam objective: 
 * Understand and use essential tools for handling files, directories,
   commandline environments, and documentation. *Essential tools*
 
 # Essential tools
-I imagine this is the easiest thing to learn but the part that trips up most people.  From the exam guidelines, we'll cover:
+I imagine this is the simplest exam topic that probably won't need anything more
+than a 10 minute refresher.
+
+From the guidelines, we'll cover:
 * [ET.1] Access a shell prompt and issue commands with correct syntax
 * [ET.2] Use input-output redirection (>, >>, |, 2> , etc.)
 * [ET.3] Use grep and regular expressions to analyse text
@@ -30,12 +33,13 @@ I imagine this is the easiest thing to learn but the part that trips up most peo
 ## Console
 The console is where you can receive output from the kernel and type commands to
 the kernel.  Navigating between consoles is typically done with `Ctrl+Alt+Fn`,
-where n is the number of the console and F is one of the function keys.  Virtual consoles are accessed at the
-physical machine not remotely.  Graphical installations typically take place on
-console 6.
+where n is the number of the console and F is one of the function keys.  Virtual
+consoles are accessed at the physical machine, not remotely.  Graphical
+installations typically take place on console 6.
 
 ## Basic commands
-Here are the most basic commands used in systems administration:
+Here are the most basic commands you will use in day-to-day administration:
+
 ### Navigation and file manipulation
 * `ls`: list directory contents
 * `cd`: change directory
@@ -43,54 +47,60 @@ Here are the most basic commands used in systems administration:
 * `mv`: move
 * `cp`: copy
 * `pwd`: print working directory
-* mkdir: make directory
-* touch: make file
-* head: read first 10 lines of file
-* tail: read last 10 lines of file
-* locate: find file
-* grep: search a file
+* `mkdir`: make directory
+* `touch`: make file
+* `head`: read first 10 lines of file
+* `tail`: read last 10 lines of file
+* `locate`: find file
+* `grep`: search a file
 
 ### Output and user information
-* echo: write to output 
-* id: list user and group IDs
-* date: print the date
+* `echo`: write to output 
+* `id`: list user and group IDs
+* `date`: print the date
 
 ### Manipulating the environment
-* set: show shell variables
-* alias: create shell alias
-* env: show exported variables (from the parent process)
-* which: show which command from the shell's PATH would run
-* type: show what type of file 
+* `set`: show shell variables
+* `alias`: create shell alias
+* `env`: show exported variables (from the parent process)
+* `which`: show which command from the shell's PATH would run
+* `type`: show what type of file 
 
 # [ET.2] Use input-output redirection (>, >>, |, 2> , etc.)
-Inside bash there are three file descriptors to be aware of: `STDOUT`, `STDERR`,
+Inside bash there are three file descriptors: `STDOUT`, `STDERR`,
 and `STDIN`.
 
 ## STDOUT
 STOUT is represented by file descriptor 1.  You use the redirection operator to
 send output somewhere else.  `ls 1>file1.txt` sends the output of the command to
-the file entitled file1.txt
+the file entitled `file1.txt`.
 
 ## STDERR
 STOUT is represented by file descriptor 2.  You use the redirection operator to
 send output somewhere else.  `ls 2>file1.txt` sends any errors from running the
-command to the file and still prints the results to the virtual console.
+command to the file and still sends `STDOUT` to the virtual console.
 
 ## Redirecting both to a file
 You can reference the address of a redirection file descriptor to send them to
 each other.
 
-For example, `2>&1` means send anything sent to STDERR to where STDOUT is
+For example, `2>&1` means send anything sent to STDERR is redirected to where STDOUT is
 pointing.  Another way of specifying this is to use `>&` which is the same as
 the previous incantation.
 
 Keep in mind that STDERR is an unbuffered stream so it writes output
 immediately.  STDOUT is not so you may want to send each to different files,
-like so: `ls >file.txt 2>file-error.txt`.
+like so: `ls >file.txt 2>file-error.txt` to avoid output from STDERR to appear
+piecemeal inside STDOUT output.
+
+## Redirection with >>
+The only difference between `>` and `>>` is that the latter appends and the
+former overwrites.
 
 ## Piping
 You can chain command output to other programs using piping.  It's much like
-redirection except the output comes from STDOUT of another program.
+redirection except the output comes from STDOUT of one program to the STDIN
+of another.
 
 ```
 $ ls | head
@@ -191,7 +201,7 @@ to.
 These are the most common commands I use.
 * `-i identify_file`: use identity file when connecting
 * `-D port`: create a SOCKS5 server at specified port and send all incoming
-  connections over to host
+  connections over to the host
 * `-L port:host:hostport`: incoming connections on local port be forwarded to
   given host and port on the remote side.
 * `-p port`: port to use when connecting to the remote host.
@@ -276,13 +286,13 @@ shell.
 # [ET.8] Create, delete, copy, and move files and directories
 You can reference ET.1 for some of the basic commands here.  Things to keep in
 mind:
-* mv has a backup command that is non-destructive.  Good for testing moves
+* `mv` has a backup command that is non-destructive.  Good for testing moves
   before making them part of a shell script.
-* rm has an iteractive mode -- good for checking that recursive deletes won't
+* `rm` has an iteractive mode -- good for checking that recursive deletes won't
   remove anything important
-* rm also has a -d flag which removes empty directories.
-* touch is the default command for creating files.  mkdir is the command for
-  creating directories.  You'll often use the -p option on mkdir to make a
+* `rm` also has a -d flag which removes empty directories.
+* `touch` is the default command for creating files.  `mkdir` is the command for
+  creating directories.  You'll often use the -p option on `mkdir` to make a
   nested set of directories.
 
 # [ET.9] Create hard and soft links
@@ -330,4 +340,13 @@ Can be installed with `yum install bash-completion`.
 Man pages can be read with `man command`.  It's split into sections (see `man man`) and you'll probably only need to know sections 1 (executable programs), 5 (file formats), and 8 (system administration commands).
 
 ## Info documents
-Consider info documents a newer, more comprehensive version of man pages.  Typically man pages will be enough to understand how to run the program but you'll find that GNU utilities have a very well written info document.  Open them with `info command`.
+Consider info documents a newer, more comprehensive version of man pages.
+Typically man pages will be enough to understand how to run the program but
+you'll find that GNU utilities have a very well written info document.  Open
+them with `info command`.
+
+## /usr/share/doc
+Often the `/usr/share/doc` directory contains a lot more details and sample
+configuration files.  Keep that in mind if you need to start a service or define
+a configuration and you don't know how to get started.  Use grep to find the
+service/config name and work from there.
