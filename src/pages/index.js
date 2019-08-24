@@ -2,7 +2,6 @@ import React from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import containerStyles from "../components/index.module.css"
 
 import { graphql, Link } from "gatsby"
 
