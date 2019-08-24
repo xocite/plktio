@@ -10,7 +10,6 @@ export default ({ data }) => {
   return (
     <Layout>
       <SEO title="Home" />
-      <h3>Hi <span role="img" aria-label="Waving hand">👋</span>  I’m Antony, a technical product manager.  I help you build quality products.</h3>
       <p>Read my most recent posts and commentary below.</p>
       {data.allMarkdownRemark.edges.map(({ node }) => (
         <dl key={node.id}>
