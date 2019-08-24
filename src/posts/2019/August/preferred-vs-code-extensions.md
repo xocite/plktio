@@ -14,7 +14,14 @@ This has enabled me to switch computers and use Git to keep them in sync.  On Wi
 # Bringing over vim settings
 As of writing, my [.vimrc](https://github.com/xocite/dotrc/blob/master/vimrc) is pretty minimal.
 * 80 character width with forced wrap (not visual wrap)
-* tabs turned into spaces
-* tabstop of 2 spaces
+  * "rewrap.autoWrap.enabled": true
+  * "rewrap.doubleSentenceSpacing": true
+  * "rewrap.wrappingColumn": 80
+* tabs turned into spaces and tabstop of 2 spaces: "editor.tabSize": 2
 * automatically indent according to language paradigms
-* UTF-8 encoding
+* UTF-8 encoding: by default in VSCode
+
+I'm only using three extensions at the moment:
+* **ESLint**: for debugging my Gatsby website
+* **Rewrap**: for maintaining that 80 character width master race
+* **Remote**: Microsoft's remote extensions to work with containers
