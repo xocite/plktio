@@ -1,0 +1,53 @@
+---
+title: 'Hosting this blog'
+pagetitle: 'Hosting this blog'
+author: 'Antony Jepson'
+date: '4 January 2018'
+abstract: 'Using CloudFront to further secure the website'
+keywords:
+- OpenGL
+- CloudFront
+- AWS
+- S3
+- bucket
+article: true
+---
+I've been wanting to play around with some graphics work for a while now and
+while I've used Blender for a few renders, I've never sat down and set up a
+programming environment on my computer.  What follows is a short tutorial on how
+to get started in OpenGL on Windows -- but still using the Linux conventions
+that I'm familiar with.
+
+
+As you can tell from a simple WHOIS lookup, I use AWS to host this
+static website. As it becomes easier and easier to run a DDOS attack, I
+wanted to prevent substantial costs in the event of one by using
+Amazon’s CloudFront protection. The added cost was minimal and will
+potentially save me a lot of headache in the future. I also get the
+added benefit of replication which means my already small website will
+be served faster to you!
+
+This tutorial uses a combination of Amazon S3; CloudFront; and Route 53.
+
+### Network topology (before the change)
+
+Accessing my website simply used a Route 53 hosted zone which routed
+requests to a specific Amazon S3 bucket. The bucket was configured for
+static website hosting by way of bucket policy. This was a relatively
+simple set up that took minutes. Unfortunately, there’s no way to
+prevent repeated downloads without checking my bill regularly and
+pulling the plug if necessary. Additionally, the bucket isn’t replicated
+across the world meaning that people accessing the website outside the
+availability zone were subject to a slower initial download.
+
+### Network topology (after the change)
+
+While simple usually works, it pays to be diligent against attacks. To
+strengthen my website against distributed attacks, I created a
+CloudFront web distribution from the website bucket and then updated
+Route 53 to point to the web distribution. I now get the added benefit
+of HTTPS access, DDOS prevention, and IPv6 support. The only drawback is
+that updates to my site take time to be replicated which fortunately I
+can configure through the cache timeout.
+
+Let me know if you have any problems accessing the site.

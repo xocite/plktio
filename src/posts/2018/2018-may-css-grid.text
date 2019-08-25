@@ -1,0 +1,21 @@
+---
+title: 'CSS Grid'
+pagetitle: 'CSS Grid'
+author: 'Antony Jepson'
+date: '27 May 2018'
+keywords:
+- Morten Rand-Henriksen
+- CSS Grid
+- W3C
+article: true
+canonical: 'posts/2018-may-css-grid.html'
+---
+> CSS Grid is now live in all major browsers, and with it everything we know
+about web layouts changes!
+
+&mdash; from Wordpress' [YouTube](https://www.youtube.com/watch?v=txZq7Laz7_4)
+
+I agree with this.  I've updated my website design to use CSS Grid which should
+allow it to reflow better on all devices.
+
+Let me know if you run into any problems.

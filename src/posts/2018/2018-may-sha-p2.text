@@ -1,0 +1,436 @@
+---
+title: 'Understanding the Secure Hash Algorithm 2: Part 2'
+pagetitle: 'Understanding the Secure Hash Algorithm 2: Part 2'
+author: 'Antony Jepson'
+date: '14 May 2018'
+abstract: 'A handy reference for understanding one of the most used encryption algorithms: SHA-2.'
+keywords:
+- OpenGL
+- SHA\-2
+- One way function
+- Avalanche effect
+- Secure Hash Algorithm 2
+article: true
+canonical: 'posts/2018-may-sha-p2.html'
+---
+_This is the second in a three part series where we break down the SHA-2 algorithm.
+In this part, we'll perform the compression algorithm upon the message to give us
+the final hash._
+
+From [before](./2018-may-sha-p1.html), we have the message M, shown
+below.
+
+    Block M^1^~1~  = 0x534E5344
+    Block M^1^~2~  = 0x80000000
+    Block M^1^~3~  = 0x80000000
+    [....blocks of zeroes.....]
+    Block M^1^~16~ = 0x00000020
+
+Now we'll start compressing the message to generate the hash.
+
+### Hash computation
+
+We create a message schedule [from the official
+documentation](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf) of 64
+32-bit words, 8 32-bit temporary variables, and the final hash value of 8 32-bit
+words.  The words of the message schedule have the label W~0~ to W~63~.  We
+label the 8 temporary variables _a_ through _h_ and the hash values as H^(i)^~0~
+through H^(i)^~7~ with the initial value being in H^(0)^.  These hash values
+will be replaced by the next stage hash value after each message block is
+processed.  The final hash value will be H^(N)^.  Finally, we set aside two
+temporary words, T~1~ and T~2~.
+
+Begin by setting the initial hash value to be the fractional square root
+of the first 8 primes.
+
+    H^0^ = 0x6a09e667
+    H^1^ = 0xbb67ae85
+    H^2^ = 0x3c6ef372
+    H^3^ = 0xa54ff53a
+    H^4^ = 0x510e527f
+    H^5^ = 0x9b05688c
+    H^6^ = 0x1f83d9ab
+    H^7^ = 0x5be0cd19
+    M^1^ = shown above
+
+Then we run the following loop over each message block, i = 1 to N:
+
+1. Set the message schedule W~t~:
+    1. For t = 0 (inclusive) to t = 15 (inclusive), set W~t~ = M^0^~t~
+    2. For t = 16 (inclusive) to t = 63 (inclusive):
+        1. set W~t~ = &sigma;(W~(t-2)~, 1, 256) + W~(t-7)~ + &sigma;(W~(t-15)~, 0, 256) + W~t(-16)
+2. Set the temporary variables:
+    1. a = H^(i-1)^~0~
+    2. b = H^(i-1)^~1~
+    3. c = H^(i-1)^~2~
+    4. d = H^(i-1)^~3~
+    5. e = H^(i-1)^~4~
+    6. f = H^(i-1)^~5~
+    7. g = H^(i-1)^~6~
+    8. h = H^(i-1)^~7~
+3. For _t_ = 0 to _t_ = 63:
+    1. Set T1 = h + sum(e, 1, 256) + Ch(e, f, g) + K~t~ + W~t~, K~t~ being the
+    t-th prime cube root
+    2. Set T2 = sum(a, 0, 256) + Maj(a, b, c)
+    3. h = g
+    4. g = f
+    5. f = e
+    6. e = d + T1
+    7. d = c
+    8. c = b
+    9. b = a
+    10. a = T1 + T2
+4. Compute the _i_^th^ interstep hash value H^i^:
+    1. H^(i)^~0~ = a + H^(i-1)^~0~
+    2. H^(i)^~1~ = a + H^(i-1)^~1~
+    3. H^(i)^~2~ = a + H^(i-1)^~2~
+    4. H^(i)^~3~ = a + H^(i-1)^~3~
+    5. H^(i)^~4~ = a + H^(i-1)^~4~
+    6. H^(i)^~5~ = a + H^(i-1)^~5~
+    7. H^(i)^~6~ = a + H^(i-1)^~6~
+    8. H^(i)^~7~ = a + H^(i-1)^~7~
+
+This gives us a message schedule of the following.
+
+    W[0]: 0x534e5344
+    W[1]: 0x80000000
+    W[2]: 00000000
+    W[3]: 00000000
+    W[4]: 00000000
+    W[5]: 00000000
+    W[6]: 00000000
+    W[7]: 00000000
+    W[8]: 00000000
+    W[9]: 00000000
+    W[10]: 00000000
+    W[11]: 00000000
+    W[12]: 00000000
+    W[13]: 00000000
+    W[14]: 00000000
+    W[15]: 0x00000020
+
+
+Once complete, the final hash is as follows:
+H^(N-1)~0~ || H^(N-1)~1~ || H^(N-1)~2~ || H^(N-1)~3~ || H^(N-1)~4~ || H^(N-1)~5~ || H^(N-1)~6~ || H^(N-1)~7~
+
+Computing the hash with the program gives us: 
+
+Hash: d440a8ff c4ea4abe 93fedd94 b82e0d00 b814cc52 b65e6dff 924fccfb 6f7b429d
+
+In the next and final part of this series, we'll take the code (below) used to
+generate the hash, clean it up, and compare it with some existing
+implementations.
+
+~~~~~ {#mycode .c}
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <inttypes.h>
+
+#define PRIME_NUMBERS 2, 3, 5, 7, 11, 13, 17, 19, 23, 29,  \
+31, 37, 41, 43, 47, 53, 59, 61, 67, 71, \
+73, 79, 83, 89, 97, 101, 103, 107, 109, 113, \
+127, 131, 137, 139, 149, 151, 157, 163, 167, 173, \
+179, 181, 191, 193, 197, 199, 211, 223, 227, 229, \
+233, 239, 241, 251, 257, 263, 269, 271, 277, 281, \
+283, 293, 307, 311
+
+#define SHA_LENGTH 256
+
+void print_step(char * func_name, uint32_t input, uint32_t output) {
+  printf("[%s]: input: %#.8x\n", func_name, input);
+  printf("[%s]: out  : %#.8x\n", func_name, output);
+}
+
+struct m_prime {
+  unsigned int pos;
+  uint32_t sqrt_frac, cbrt_frac;
+  unsigned long prime;
+  double sqrt, cbrt;
+};
+
+struct message_block {
+  uint32_t block[16];
+  struct message_block * next;
+  uint8_t position;
+};
+
+struct message_schedule {
+  uint32_t block[64];
+  struct message_schedule * next;
+};
+
+struct message_block * new_message_block(void) {
+  struct message_block * m = calloc(1, sizeof *m);
+  m->next = NULL;
+  return m;
+}
+
+void free_message_block(struct message_block * m) {
+  if (m == NULL) return;
+  free_message_block(m->next);
+  free(m);
+}
+
+struct message_schedule * new_message_schedule(void) {
+  struct message_schedule * m = calloc(1, sizeof *m);
+  m->next = NULL;
+  return m;
+}
+
+void free_message_schedule(struct message_schedule * m) {
+  if (m == NULL) return;
+  free_message_schedule(m->next);
+  free(m);
+}
+
+
+struct hash {
+  uint32_t value[8];
+};
+
+struct message_block * pad_message(char * input) {
+  size_t len = 0;
+  uint32_t * blk;
+  uint16_t remainder;
+  char ch;
+  struct message_block *head, *p;
+  head = new_message_block();
+
+  p = head;
+
+  // Determine how many message blocks we need.
+  // We need [data][1 bit][zero padding][length]
+  // [data] maximum length 447 bits
+  // [1 bit] length = 1 bit
+  // [zero padding] maximum length 447 bits
+  // [length] 64 bits
+
+  if (input == NULL) {
+    head->block[0] = 1u << 31;
+    return head;
+  }
+  
+  while (*(input + len) != '\0') {
+    len++; // we have one character
+    blk = &p->block[p->position];
+    ch = *(input + len - 1);
+
+    switch (len % 4) {
+      case 1:  *blk |= ch << 24;
+              break;
+      case 2:  *blk |= ch << 16;
+              break;
+      case 3:  *blk |= ch << 8;
+              break;
+      default: *blk |= ch;
+              break;
+    }
+
+    if (p->position == 15 && (len % 4) == 0) { // At the end of the block
+      p->next = new_message_block();
+      p = p->next;
+    } else { 
+      if (len % 4 == 0) p->position++;
+    }
+  }
+
+  // Append the one after this block.
+  p->block[p->position] += (1u << (32 - 8 * (len % 4) - 1));
+
+  // Calculate how many zeroes is needed.
+  remainder = (len * 8) % 512;
+  if (remainder > 447) { // Get a new block
+    p->next = new_message_block();
+    p = p->next;
+  }
+
+  // Convert the length to count of binary.
+  len *= 8;
+
+  p->block[14] = (uint32_t) len >> 16;
+  p->block[15] = (uint32_t) len;
+
+  return head;
+}
+
+uint64_t calculate_fractional(double floating) {
+  /* IEEE-754 double-precision
+   * S: 1 bit, sign
+   * E: 11 bits, exponent
+   * M: 53 bits, mantissa
+   */
+
+  uint64_t f, exponent, mantissa, fractional;
+
+  f = *((uint64_t *) &(floating));
+  exponent = ((f >> 13 * 4) & 0x7ff) - 0x3ff;
+  mantissa = f & 0x000fffffffffffff;
+  fractional = (((mantissa << exponent) & 0x000ffffffff00000)) >> 5 * 4;  /* Only last 4 bytes). */
+
+  return (uint32_t) fractional;
+}
+
+struct m_prime * init_prime_list(unsigned int num) {
+  /* Initialise variables. */
+  unsigned int x;
+  const unsigned int primes[]= {PRIME_NUMBERS};
+  struct m_prime *p, *mp = malloc(num * sizeof *mp);
+
+  p = mp;
+
+  for (x = 0; x < num; x++) {
+    p->prime = primes[x]; 
+    p->sqrt = sqrt(primes[x]);
+    p->cbrt = cbrt(primes[x]);
+    p->sqrt_frac = calculate_fractional(p->sqrt);
+    p->cbrt_frac = calculate_fractional(p->cbrt);
+
+    p++;
+  }
+
+  return mp;
+}
+
+void print_prime_list(struct m_prime * p, unsigned int num) {
+  unsigned int x;
+
+  printf("| Numb | Prme |   Sqrt |   Cbrt | Frac (b10) |   Frac (b2) |\n");
+  printf("|------|------|--------|--------|------------|-------------|\n");
+
+  for (x = 0; x < num; x++) {
+    printf("| %4u | %4lu | %2.4f | %2.4f | %#.8x | %#.8x  |\n", 
+        x + 1,
+        p->prime,
+        p->sqrt,
+        p->cbrt,
+        p->sqrt_frac,
+        p->cbrt_frac
+    ); 
+
+    p++;
+  }
+}
+
+uint32_t rotate_right(uint32_t x, uint16_t n) {
+  return (x >> n) | ((x << (32 - n)));
+}
+
+uint32_t hash_sigma_0(uint32_t x) {
+  return rotate_right(x, 7) ^ rotate_right(x, 18) ^ (x >> 3);
+}
+
+uint32_t hash_sigma_1(uint32_t x) {
+  return rotate_right(x, 17) ^ rotate_right(x, 19) ^ (x >> 10);
+}
+
+uint32_t hash_sum_0(uint32_t x) {
+  return rotate_right(x, 2) ^ rotate_right(x, 13) ^ rotate_right(x, 22);
+
+}
+uint32_t hash_sum_1(uint32_t x) {
+  return rotate_right(x, 6) ^ rotate_right(x, 11) ^ rotate_right(x, 25);
+}
+
+uint32_t hash_ch(uint32_t x, uint32_t y, uint32_t z) {
+  return (x & y) ^ (~x & z);
+}
+
+uint32_t hash_maj(uint32_t x, uint32_t y, uint32_t z) {
+  return (x & y) ^ (x & z) ^ (y & z);
+
+}
+ 
+struct message_schedule * compute_message_schedule(struct message_block * mb) {
+  uint8_t i;
+  struct message_schedule *ms;
+
+  if (mb == NULL)
+    return NULL;
+
+  ms = new_message_schedule();
+  for (i = 0; i < 16; i++) {
+    ms->block[i] = mb->block[i];
+  }
+
+  for (i = 16; i < 64; i++) {
+    ms->block[i] = hash_sigma_1(ms->block[i - 2]) + ms->block[i - 7] + hash_sigma_0(ms->block[i - 15]) + ms->block[i - 16];
+  }
+  ms->next = compute_message_schedule(mb->next);
+
+  return ms;
+}
+
+struct hash * perform_hash(struct hash *hash, struct message_schedule * m, struct m_prime * p) {
+  if (m == NULL) return hash;
+
+  uint32_t a, b, c, d, e, f, g, h, tx, ty;
+  uint8_t i;
+  a = hash->value[0];
+  b = hash->value[1];
+  c = hash->value[2];
+  d = hash->value[3];
+  e = hash->value[4];
+  f = hash->value[5];
+  g = hash->value[6];
+  h = hash->value[7];
+
+  for (i = 0; i < 64; i++) {
+    tx = h + hash_sum_1(e) + hash_ch(e, f, g) + (p + i)->cbrt_frac + m->block[i];
+    ty = hash_sum_0(a) + hash_maj(a, b, c);
+    h = g;
+    g = f;
+    f = e;
+    e = d + tx;
+    d = c;
+    c = b;
+    b = a;
+    a = tx + ty;
+
+    // printf("%.2u: %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x\n", i, a, b, c, d, e, f, g, h);
+  }
+
+  hash->value[0] += a;
+  hash->value[1] += b;
+  hash->value[2] += c;
+  hash->value[3] += d;
+  hash->value[4] += e;
+  hash->value[5] += f;
+  hash->value[6] += g;
+  hash->value[7] += h;
+
+  return perform_hash(hash, m->next, p);
+} 
+
+int main(int argc, char *argv[]) {
+    struct m_prime * p;
+    struct message_block *h;
+    struct message_schedule *s;
+    struct hash * hash = calloc(1, sizeof *hash);
+    unsigned int i, size = 64;
+
+    p = init_prime_list(size); 
+
+    if (argc == 1) {
+    h = pad_message(NULL);
+    } else {
+    h = pad_message(argv[1]);
+    }
+
+    for (i = 0; i < 8; i++)
+      hash->value[i] = (p + i)->sqrt_frac;
+
+    s = compute_message_schedule(h);
+
+    hash = perform_hash(hash, s, p);
+
+    printf("Hash: ");
+    for (i = 0; i < 8; i++)
+      printf("%8x ", hash->value[i]);
+    printf("\n");
+
+    free_message_block(h);
+    free(p);
+}
+~~~~~
+

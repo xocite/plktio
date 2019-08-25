@@ -1,0 +1,40 @@
+---
+title: 'Certificate Transparency'
+pagetitle: 'Certificate Transparency'
+author: 'Antony Jepson'
+date: 'April 2018'
+abstract: 'A note on how the changes put forth by Google effect this blog.'
+keywords:
+- OpenGL
+- CT
+- OpenSSL
+- Amazon
+- CT log
+article: true
+---
+Amazon recently alerted me about Google's initiative to require all
+certificates to be recorded in the certificate transparency logs.
+Looking at my current certificate for the website, it isn't currently
+set to be part of any certificate transparency logs until the renewal in
+2019. You can check yourself by doing the following:
+
+    $ openssl s_client -showcerts -servername www.antonyjepson.co.uk -connect antonyjepson.co.uk:443 2>/dev/null | openssl x509 -inform pem -noout -text
+    Certificate:
+        Data:
+            Version: 3 (0x2)
+            Serial Number:
+                0b:1a:57:8f:1a:1b:56:90:b5:bd:6a:4d:67:07:8d:39
+        Signature Algorithm: sha256WithRSAEncryption
+            Issuer: C=US, O=Amazon, OU=Server CA 1B, CN=Amazon
+            Validity
+                Not Before: Jan  3 00:00:00 2018 GMT
+                Not After : Feb  3 12:00:00 2019 GMT
+            Subject: CN=www.antonyjepson.co.uk
+    [..snip..]
+
+As it was issued before the cut off of April 2018. I'll do nothing for
+now and not opt out of Amazon's automatic inclusion in the CT logs upon
+renewal in February next year.
+
+\
+April 2018

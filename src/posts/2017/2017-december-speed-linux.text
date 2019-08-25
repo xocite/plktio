@@ -1,0 +1,65 @@
+---
+title: 'Getting back up to speed with Linux'
+pagetitle: 'back up to speed with Linux'
+author: 'Antony Jepson'
+date: '10 April 2017'
+abstract: 'On returning to using Linux every day.'
+keywords:
+- Linux
+- Terminal
+- rxvt-unicode
+- xlsfont
+- backlight
+article: true
+---
+I've been using Linux as my full-time personal OS for the past few
+months. It's a hit of nostalgia. However, I haven't really had time to
+configure it in detail. After a few hours walking down memory lane, I
+finally have things configured how I like. Here's what I changed.
+
+### Terminal
+
+I switched from gnome-terminal (Ubuntu default) to rxvt-unicode. Doing
+so required tweaking a lot of defaults in \~/.Xresources. I specified
+the Zenburn theme as the default as it works all times of day. I also
+picked a large font for my 1980x1080 resolution so I don't strain my
+eyes. Funnily enough, this simple configuration is very similar to a lot
+of the paid for apps on the iOS App Store that let you write with little
+distractions.
+
+xlsfont can be used to list available fonts to place in your
+\~/.Xresources. Alternatively, you can use the "xft:" specification to
+reference TrueType fonts with their human readable name.
+
+### Window manager
+
+For the window manager, I migrated my entire workflow back to the
+light-weight work-horse that is dwm. Dwm has been my favourite window
+manager since I first bootstrapped a Gentoo installation back in 2008
+(see my old blog on Wordpress to read more about it).
+
+However, this wasn't without some difficulties as Ubuntu does provide a
+full-fledged experience through Unity. I had to install/configure the
+following programs to bring me back up to speed.
+
+-   Backlight. I installed xbacklight to configure the backlight.
+    Incarnation is "xbacklight -set %". I can later update this to use
+    the Xorg XF86 keys so that Function+Arrow\_Up =
+    Brightness\_Increment as it does on Ubuntu.
+-   Battery. To monitor battery I use the script I wrote below.
+    `#!/bin/sh  while true; do   battery=cpi -b | awk '{print $4}' | sed 's/,//'  uptime=ptime -p  xsetroot -name "$battery | $uptime"   sleep 5s done`
+-   Wifi. I patched dwm with the dwm systray patch available on
+    suckless.org and then added nm-applet (default network manager that
+    comes with Ubuntu) to my start up script. This way I still get a
+    fully featured network manager that doesn't load all of Gnome.
+-   Loading apps. I use dmenu which is a standard part of the
+    suckless-utils.
+
+All in all, switching back to dwm has improved my productivity by a
+noticeable amount as I spend less time managing windows and more time
+writing content.
+
+[dwm](https://dwm.suckless.org/)
+
+\
+10 December 2017

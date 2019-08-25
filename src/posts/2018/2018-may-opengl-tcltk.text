@@ -1,0 +1,31 @@
+---
+title: 'Live OpenGL edits with TCL/tk'
+---
+I've wanted to bring my programming domain knowledge into the 3D realm for a
+while but never really sat down and tried to understand the plethora of options
+available.
+
+For this (extended tutorial), we'll start by getting Enlightenment installed on
+Linux and Windows
+
+I'm not sure if this is the best choice for my first introduction to OpenGL but
+I'll be building a simple app with [Tcl](https://www.tcl.tk/) (Tool Command Language), Gnocl (Tcl/Gtk
+bindings), and OpenGL on both Windows and Linux.
+
+Naturally, since I run most of my Linux work in a virtual machine, it'll be less
+performant than the equivalent program being run on Windows.
+
+Two important reference articles was
+[this](https://codeplea.com/opengl-with-c-and-tcl-tk) one by Lewis Van Winkle and [this]
+one by 
+
+### Getting started
+#### Windows
+On Windows, I really hate installing programs to C:\Program Files so I'll be
+deploying portable versions.
+
+#### Linux
+Make sure you can run the following sample program.
+
+~~~~~ {#mycode .c}
+
