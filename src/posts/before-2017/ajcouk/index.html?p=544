@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>Creating a video montage with ffmpeg &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; Creating a video montage with ffmpeg Comments Feed" href="https://antonyjepson.co.uk/creating-a-video-montage-with-ffmpeg/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Cloning Logical Volumes on Linux' href='index.html?p=524' />
+<link rel='next' title='Hosting my own blog' href='index.html?p=576' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=544" />
+<link rel='shortlink' href='index.html?p=544' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>Creating a video montage with ffmpeg</header>
+<em>With 1080p (and in some cases 2K) cameras now being standard on mobile phones, it&#8217;s easier than ever to create high quality video. Granted, the lack of quality free video editors on Windows / Linux leaves something to be desired. I played with Blender VSE (Video Sequence Editor) to try and create a montage of [&hellip;]</em><br /><em>4 August 2016</em>
+<p>With 1080p (and in some cases 2K) cameras now being standard on mobile phones, it&#8217;s easier than ever to create high quality video. Granted, the lack of quality free video editors on Windows / Linux leaves something to be desired.<br />
+I played with Blender VSE (Video Sequence Editor) to try and create a montage of my most recent motorcycle rides but the interface was non-intuitive and had a rather high learning curve.<br />
+So, I turned to the venerable ffmpeg to create my video montage.<br />
+<strong>Selecting the source content</strong><br />
+Before jumping to the command line, you will need to gather the list of clips you want to join and have a basic idea of what you want to achieve. Using your favourite video player (VideoLAN Player, in my case), play through your captured videos and find the timeframe for trimming.<br />
+For the purposes of this tutorial, let&#8217;s assume this is my game plan:<br />
+<code><br />
+Video effect 1: fade in from black<br />
+Audio track 1: filename "audio.mp3"<br />
+Video clip 1: filename "getting_ready.mov"; length 03:30 [mm:ss]; trim start 01:30; trim end 02:15<br />
+Text overlay 1: text "Touch Sensitive - Pizza Guy"; background partially transparent; font Arial; position lower left<br />
+Video effect 2: Cross fade<br />
+Video clip 2, filename "riding_fast.mov", length 00:50 [mm:ss], trim start 00:15, trim end 00:50<br />
+Video effect 3: Cross fade<br />
+Video clip 3, filename "going_home.mov", length 02:00 [mm:ss], trim start 00:45, trim end 01:55<br />
+</code><br />
+<strong>Understanding ffmpeg</strong><br />
+The ffmpeg <a href="https://ffmpeg.org/documentation.html">documentation</a> is extensive and well written. I highly recommend you spend some time familiarising yourself with the video filter section.<br />
+Let&#8217;s begin by understanding the file formats of our videos. For this tutorial, since they are all recorded by the same camera they will all share the same video / audio codecs and container.</p>
+<pre>$ ffmpeg -i getting_ready.mp4
+Guessed Channel Layout for Input Stream #0.1 : mono
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '.\getting_ready.mov':
+  Metadata:
+    major_brand     : qt
+    minor_version   : 0
+    compatible_brands: qt
+    creation_time   : 2016-01-01 00:34:11
+    original_format : NVT-IM
+    original_format-eng: NVT-IM
+    comment         : CarDV-TURNKEY
+    comment-eng     : CarDV-TURNKEY
+  Duration: 00:3:30.47, start: 0.000000, bitrate: 16150 kb/s
+    Stream #0:0(eng): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080, 14965 kb/s, 30 fps, 30 tbr, 30k tbn, 60k tbc (default)
+    Metadata:
+      creation_time   : 2016-01-01 00:34:11
+      handler_name    : DataHandler
+      encoder         : h264
+    Stream #0:1(eng): Audio: pcm_s16le (sowt / 0x74776F73), 32000 Hz, 1 channels, s16, 512 kb/s (default)
+    Metadata:
+      creation_time   : 2016-01-01 00:34:11
+      handler_name    : DataHandler
+</pre>
+<p>Important items to note</p>
+<ul>
+<li>In &#8220;Stream #0:0&#8221; information, the video encoding is H.264. We will keep this codec.</li>
+<li>In &#8220;Stream #0:1&#8221; information, we can see that the audio is raw audio (16 bits per sample, little endian). We will be converting this to AAC in the output.</li>
+</ul>
+<p><strong>Trimming the clips</strong><br />
+We will begin the effects by trimming the portions we need. As we will be adding effects later, we&#8217;ll leave 2 seconds on either side of the trim.<br />
+<code><br />
+$ ffmpeg -i ./getting_ready.mov -ss 00:01:30.0 -c copy -t 00:00:47.0 ./output-1.mov<br />
+$ ffmpeg -i ./riding_fast.mov -ss 00:00:13.0 -c copy -t 00:00:39.0 ./output-2.mov<br />
+$ ffmpeg -i ./going_home.mov -ss 00:00:43.0 -c copy -t 00:01:12.0 ./output-3.mov<br />
+</code><br />
+<strong>Applying effects</strong><br />
+Note: If you want to speed up processing time while you get the hang of this, you can scale the videos down and then apply the effects to the full size video once you&#8217;re satisified with the output.<br />
+<code>$ ffmpeg -i ./output-1.mov -vf scale=320:-1 ./output-1s.mov</code><br />
+-1 on the scale filter means determine the height based on the aspect ratio of the input file.<br />
+First, I&#8217;ll show how to add the effects individually (at a potential loss of quality). Then we will follow up by chaining the filters together.<br />
+Let us apply the fade in/outs to the videos.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -vf fade=t=out:st=45.0:d=2.0 ./output-1sf.mov<br />
+$ ffmpeg -i ./output-2s.mov -vf 'fade=in:st=0.0:d=2.0, fade=t=out:st=37.0:d=2.0' ./output-2sf.mov<br />
+$ ffmpeg -i ./output-3s.mov -vf fade=in:st=0.0:d=2.0 ./output-3sf.mov<br />
+</code><br />
+Unfortunately, as H.264 does not support alpha transparency, we will need to use the filtergraph to let us apply alpha (for the fading) to the stream before outputting to the final video. First, let&#8217;s rebuild the above command as a filter graph.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -i ./output-2s.mov -i ./output-3s.mov -filter_complex '[0:v]fade=t=out:st=45.0:d=2.0[out1];[1:v]fade=in:st=0.0:d=2.0, fade=t=out:st=37.0:d=2.0[out2];[2:v]fade=in:st=0.0:d=2.0[out3]' -map '[out1]' ./output-1sf.mov -map '[out2]' ./output-2sf.mov -map '[out3]' ./output-3sf.mov<br />
+</code><br />
+This uses the filter_complex option to enable a filtergraph. First, we list the inputs. Each input is handled in order and can be access by the [n:v] operator where &#8216;n&#8217; is the input number (starting from 0) and &#8216;v&#8217; means access the video stream. As you can tell the audio was not copied from the input streams in this command. Semicolon is used to separated parallel operations and the comma separates linear operations (operating upon the same stream).<br />
+Next, let&#8217;s add the alpha effect and combine the videos into one output.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -i ./output-2s.mov -i ./output-3s.mov -filter_complex '[0:v]fade=t=out:st=45.0:d=2.0:alpha=1[out1];[1:v]fade=in:st=0.0:d=2.0:alpha=1, fade=t=out:st=37.0:d=2.0:alpha=1[out2];[2:v]fade=in:st=0.0:d=2.0:alpha=1[out3];[out2][out1]overlay[out4];[out3][out4]overlay[out5]' -map [out5] out.mov<br />
+</code><br />
+Next add the text overlay.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -i ./output-2s.mov -i ./output-3s.mov -filter_complex "[0:v]fade=t=out:st=45.0:d=2.0:alpha=1[out1];[1:v]fade=in:st=0.0:d=2.0:alpha=1, fade=t=out:st=37.0:d=2.0:alpha=1[out2];[2:v]fade=in:st=0.0:d=2.0:alpha=1[out3];[out2][out1]overlay[out4];[out3][out4]overlay[out5];[out5]drawtext=fontfile=/Windows/Fonts/Arial.ttf:text='Touch Sensitive - Pizza Guy':fontcolor=white:x=(0.08*w):y=(0.8*h)" out.mov<br />
+</code><br />
+Finally, let&#8217;s have the text appear at 5 seconds and dissappear at 10 seconds.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -i ./output-2s.mov -i ./output-3s.mov -filter_complex "[0:v]fade=t=out:st=45.0:d=2.0:alpha=1[out1];[1:v]fade=in:st=0.0:d=2.0:alpha=1, fade=t=out:st=37.0:d=2.0:alpha=1[out2];[2:v]fade=in:st=0.0:d=2.0:alpha=1[out3];[out2][out1]overlay[out4];[out3][out4]overlay[out5];[out5]drawtext=fontfile=/Windows/Fonts/Arial.ttf:text='Touch Sensitive - Pizza Guy':x=(0.08*w):y=(0.8*h):fontcolor_expr=ffffff%{eif\\:clip(255*(between(t\,5\,10))\,0\,255)\\:x\\:2}" out.mov<br />
+</code><br />
+At last, let&#8217;s add the audio track and fade it out.<br />
+<code><br />
+$ ffmpeg -i ./output-1s.mov -i ./output-2s.mov -i ./output-3s.mov -i ./audio.aac -filter_complex "[0:v]fade=t=out:st=45.0:d=2.0:alpha=1[out1];[1:v]fade=in:st=0.0:d=2.0:alpha=0, fade=t=out:st=37.0:d=2.0:alpha=1[out2];[2:v]fade=in:st=0.0:d=2.0:alpha=0[out3];[out1][out2]overlay[out4];[out3][out4]overlay[out5];[out5]drawtext=fontfile=/Windows/Fonts/Arial.ttf:text='Touch Sensitive - Pizza Guy':x=(0.08*w):y=(0.8*h):fontcolor_expr=ffffff%{eif\\:clip(255*(between(t\,5\,10))\,0\,255)\\:x\\:2}" -shortest -map 3:0 -af afade=t=out:st=68:d=4 out.mov<br />
+</code><br />
+The final command, all together.  More information about PTS-STARTPTS can be found <a href="http://trac.ffmpeg.org/wiki/FilteringGuide#multipleinputoverlayin2x2grid" target="_blank">here</a>.<br />
+&nbsp;</p>
+<pre>ffmpeg -y -i ./output-1.mov -i ./output-2.mov -i ./output-3.mov -i ./audio.aac -filter_complex "[0:v]fade=t=out:st=10.0:d=2.0:alpha=1,setpts=PTS-STARTPTS[out1];
+ [1:v]fade=in:st=0.0:d=2.0:alpha=1,fade=t=out:st=26.0:d=2.0:alpha=1,setpts=PTS-STARTPTS+(10/TB)[out2];
+ [2:v]fade=in:st=0.0:d=2.0:alpha=1,fade=t=out:st=16.0:d=4.0:alpha=0,setpts=PTS-STARTPTS+(36/TB)[out3];
+ [out1][out2]overlay[out4];
+ [out4][out3]overlay[out5];[out5]drawtext=fontfile=/Windows/Fonts/Arial.ttf:text='Touch Sensitive - Pizza Guy':x=(0.08*w):y=(0.8*h):fontsize=52:fontcolor_expr=ffffff%{eif\\:clip(255*(between(t\,3\,8))\,0\,255)\\:x\\:2}" -map 3:0 -af afade=t=out:st=52:d=4 -shortest output.mov</pre>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>

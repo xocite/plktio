@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>ifconfig Output on macOS Mojave &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; ifconfig Output on macOS Mojave Comments Feed" href="https://antonyjepson.co.uk/ifconfig-output-on-macos-mojave/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Setting up macOS Mojave' href='index.html?p=598' />
+<link rel='next' title='Installing Jupyter on macOS Mojave' href='index.html?p=626' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=602" />
+<link rel='shortlink' href='index.html?p=602' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>ifconfig Output on macOS Mojave</header>
+<em>ifconfig is a venerable tool that&#8217;s been around since 2008, according to the manpage on macOS. If you have a recent device, you&#8217;ll discover a much larger number of devices than on Linux. Here&#8217;s the simplified output from my computer. $ ifconfig | sed -E &#8216;s/[[:space:]:].*//;/^$/d&#8217; | sort VHC128 XHC0 XHC1 XHC20 ap1 awdl0 bridge0 [&hellip;]</em><br /><em>28 November 2018</em>
+<p>ifconfig is a venerable tool that&#8217;s been around since 2008, according to the manpage on macOS. If you have a recent device, you&#8217;ll discover a much larger number of devices than on Linux.</p>
+<p>Here&#8217;s the simplified output from my computer.</p>
+<pre>$ ifconfig | sed -E 's/[[:space:]:].*//;/^$/d' | sort
+VHC128
+XHC0
+XHC1
+XHC20
+ap1
+awdl0
+bridge0
+en0
+en1
+en2
+en3
+en4
+en5
+gif0
+lo0
+p2p0
+stf0
+utun0
+utun2
+utun3</pre>
+<p>Let&#8217;s walk through them individually.</p>
+<p><strong>lo0</strong> is the loopback interface. This is used for the machine to refer to itself.</p>
+<p><strong>gif0</strong> is the software network interface.</p>
+<p><strong>stf0</strong> is the IPv6 to IPv4 interface.</p>
+<p><strong>gif0</strong> is a tunnel interface for IPv4 to IPv6.</p>
+<p><strong>p2p0</strong> is airdrop.</p>
+<p><strong>en0</strong> is the WiFi interface.</p>
+<p><strong>en1</strong> through <strong>en4</strong> are the Thunderbolt interfaces, first through fourth.</p>
+<p><strong>bridge0</strong> is the Thunderbolt bridge. typically for transfering files over cable between two Macs.</p>
+<p><strong>awdl0</strong> is the Apple Wireless Direct Link, typically used for Hotspot functionality with iOS devices and your Apple computer.</p>
+<p><strong>ap1</strong> is probably related to the above but I can&#8217;t confirm.</p>
+<p><strong>en5</strong> is iBridge adapter for the TouchBar.</p>
+<p><strong>utunN</strong> are related to the sharing of information between devices on the same iCloud account. They can also be created by any VPN interfaces you&#8217;ve added.</p>
+<p><strong>XHC20</strong>, <strong>XHC0</strong>, <strong>XHC1</strong>, and <strong>VHC128</strong> are something I&#8217;ve never seen before with an ifconfig output. I assume they are related to USB controllers. Let&#8217;s look at the IOUSB registry plane for more details.</p>
+<pre>$ ioreg -p IOUSB
++-o Root [...]
+ +-o AppleUSBVHCIBCE Root Hub Simulation@80000000 [...]
+ +-o AppleUSBXHCI Root Hub Simulation@14000000 [...]</pre>
+<p>Here we can see two virtual USB hub simulators.</p>
+<p>On the first, a simulated virtual USB Host Controller Interface, we can see many iBridge devices connected, including the display, ambient light sensor, camera, microphone, keyboard/trackpad, and something called a DFR brightness. The closest related acronym I could find was digital feedback reducer. In any case, all the Apple devices are exposed via this virtual USB hub. The address of the AppleUSBVHCIBCE is 128 so that explains the VHC128 interface on the ifconfig output.</p>
+<p>On the second, an eXtensible Host Controller Inteface (HCI) for Universal Serial Bus (USB), will show any devices you have connected via the ports on your Mac. If we dig deeper into the AppleUSBHostController,</p>
+<pre>$ ioreg -w0 -rc AppleUSBHostController</pre>
+<p>[&#8230; output truncated &#8230;]</p>
+<p>We can see one AppleIntelCNLUSBXHCI client which shares the same PCI bus with the four AppleUSB20XHCITypeCPort clients. Furthermore, we can see two AppleUSBXHCITR , each of which having two of the AppleUSB30XHCITypeCPort class, likely the USB 3.0 controllers. Important to note is that the addresses of the clients with the AppleUSBXHCITR class: XHC1@14, XHC2@00, and XHC3@01, giving us the three devices we see in the ifconfig output: XHC20, XHC0, and XHC1, if you we take the high byte from the addresses. It&#8217;s likely the numbers after XHC are their sequential locations on the bus.</p>
+<p>From these we can conclude that these are merely the USB debugging interfaces, both for the internal clients and external clients.</p>
+<p>Using ioreg to dig deeper into the relationship between entities wasn&#8217;t as easy as I&#8217;m used to on Linux by using lsusb. This leads me to believe that perhaps ioreg is deprecated and there&#8217;s a better utility available or some of this information is not exposed completely in publically available tools.</p>
+<p>In any case, knowing the source of these interfaces certainly leaves me less perturbed.</p>
+<p><strong>Sources</strong></p>
+<p>https://apple.stackexchange.com/questions/47477/unexpected-interfaces-in-ifconfig</p>
+<p>https://github.com/RehabMan/OS-X-USB-Inject-All</p>
+<p>https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf</p>
+<p>https://www.intel.com/content/www/us/en/support/products/65855/software/chipset-software/intel-usb-3-0-extensible-host-controller-driver.html</p>
+<p>https://github.com/Dunedan/mbp-2016-linux/issues/71</p>
+<p>https://forums.developer.apple.com/thread/95380</p>
+<p>https://developer.apple.com/library/archive/documentation/DeviceDrivers/Conceptual/IOKitFundamentals/Features/Features.html</p>
+<p>https://developer.apple.com/library/archive/documentation/DeviceDrivers/Conceptual/IOKitFundamentals/TheRegistry/TheRegistry.html</p>
+<p>https://www.ifixit.com/Teardown/MacBook+Pro+13-Inch+Touch+Bar+2018+Teardown/111384</p>
+<p>https://duo.com/blog/apple-imac-pro-and-secure-storage</p>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>
