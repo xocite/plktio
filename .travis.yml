@@ -4,6 +4,7 @@ node_js:
 
 dist: bionic
 sudo: false
+script: gatsby build
 
 deploy:
   provider: pages
