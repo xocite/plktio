@@ -12,6 +12,5 @@ deploy:
   keep_history: true
   local_dir: public
   target_branch: gh-pages
-  fqdn: plkt.io
   on:
     branch: master
