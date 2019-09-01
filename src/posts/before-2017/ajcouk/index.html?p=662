@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>Understanding SHA256 Part 2 &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; Understanding SHA256 Part 2 Comments Feed" href="https://antonyjepson.co.uk/understanding-sha256-p2/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Understanding SHA256 Part 1' href='index.html?p=661' />
+<link rel='next' title='Understanding SHA256 Part 3' href='index.html?p=663' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=662" />
+<link rel='shortlink' href='index.html?p=662' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>Understanding SHA256 Part 2</header>
+<em>This is the second in a three part series where we break down the SHA-2 algorithm. In this part, we&#8217;ll perform the compression algorithm upon the message to give us the final hash. From before, we have the message M, shown below. Block M^1^~1~ = 0x534E5344 Block M^1^~2~ = 0x80000000 Block M^1^~3~ = 0x80000000 [&#8230;.blocks [&hellip;]</em><br /><em>12 May 2018</em>
+<p><em>This is the second in a three part series where we break down the SHA-2 algorithm. In this part, we&#8217;ll perform the compression algorithm upon the message to give us the final hash.</em></p>
+<p>From <a href="file:///Users/plkt/Downloads/2018-09-06-aj/posts/2018-may-sha-p1.html">before</a>, we have the message M, shown below.</p>
+<pre><code>Block M^1^~1~  = 0x534E5344
+Block M^1^~2~  = 0x80000000
+Block M^1^~3~  = 0x80000000
+[....blocks of zeroes.....]
+Block M^1^~16~ = 0x00000020</code></pre>
+<p>Now we&#8217;ll start compressing the message to generate the hash.</p>
+<h3 id="hash-computation">Hash computation</h3>
+<p>We create a message schedule <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf">from the official documentation</a> of 64 32-bit words, 8 32-bit temporary variables, and the final hash value of 8 32-bit words. The words of the message schedule have the label W<sub>0</sub> to W<sub>63</sub>. We label the 8 temporary variables <em>a</em> through <em>h</em> and the hash values as H<sup>(i)</sup><sub>0</sub> through H<sup>(i)</sup><sub>7</sub> with the initial value being in H<sup>(0)</sup>. These hash values will be replaced by the next stage hash value after each message block is processed. The final hash value will be H<sup>(N)</sup>. Finally, we set aside two temporary words, T<sub>1</sub> and T<sub>2</sub>.</p>
+<p>Begin by setting the initial hash value to be the fractional square root of the first 8 primes.</p>
+<pre><code>H^0^ = 0x6a09e667
+H^1^ = 0xbb67ae85
+H^2^ = 0x3c6ef372
+H^3^ = 0xa54ff53a
+H^4^ = 0x510e527f
+H^5^ = 0x9b05688c
+H^6^ = 0x1f83d9ab
+H^7^ = 0x5be0cd19
+M^1^ = shown above</code></pre>
+<p>Then we run the following loop over each message block, i = 1 to N:</p>
+<ol>
+<li>Set the message schedule W<sub>t</sub>:
+<ol>
+<li>For t = 0 (inclusive) to t = 15 (inclusive), set W<sub>t</sub> = M<sup>0</sup><sub>t</sub></li>
+<li>For t = 16 (inclusive) to t = 63 (inclusive):
+<ol>
+<li>set W<sub>t</sub> = σ(W<sub>(t-2)</sub>, 1, 256) + W<sub>(t-7)</sub> + σ(W<sub>(t-15)</sub>, 0, 256) + W~t(-16)</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Set the temporary variables:
+<ol>
+<li>a = H<sup>(i-1)</sup><sub>0</sub></li>
+<li>b = H<sup>(i-1)</sup><sub>1</sub></li>
+<li>c = H<sup>(i-1)</sup><sub>2</sub></li>
+<li>d = H<sup>(i-1)</sup><sub>3</sub></li>
+<li>e = H<sup>(i-1)</sup><sub>4</sub></li>
+<li>f = H<sup>(i-1)</sup><sub>5</sub></li>
+<li>g = H<sup>(i-1)</sup><sub>6</sub></li>
+<li>h = H<sup>(i-1)</sup><sub>7</sub></li>
+</ol>
+</li>
+<li>For <em>t</em> = 0 to <em>t</em> = 63:
+<ol>
+<li>Set T1 = h + sum(e, 1, 256) + Ch(e, f, g) + K<sub>t</sub> + W<sub>t</sub>, K<sub>t</sub> being the t-th prime cube root</li>
+<li>Set T2 = sum(a, 0, 256) + Maj(a, b, c)</li>
+<li>h = g</li>
+<li>g = f</li>
+<li>f = e</li>
+<li>e = d + T1</li>
+<li>d = c</li>
+<li>c = b</li>
+<li>b = a</li>
+<li>a = T1 + T2</li>
+</ol>
+</li>
+<li>Compute the <em>i</em><sup>th</sup> interstep hash value H<sup>i</sup>:
+<ol>
+<li>H<sup>(i)</sup><sub>0</sub> = a + H<sup>(i-1)</sup><sub>0</sub></li>
+<li>H<sup>(i)</sup><sub>1</sub> = a + H<sup>(i-1)</sup><sub>1</sub></li>
+<li>H<sup>(i)</sup><sub>2</sub> = a + H<sup>(i-1)</sup><sub>2</sub></li>
+<li>H<sup>(i)</sup><sub>3</sub> = a + H<sup>(i-1)</sup><sub>3</sub></li>
+<li>H<sup>(i)</sup><sub>4</sub> = a + H<sup>(i-1)</sup><sub>4</sub></li>
+<li>H<sup>(i)</sup><sub>5</sub> = a + H<sup>(i-1)</sup><sub>5</sub></li>
+<li>H<sup>(i)</sup><sub>6</sub> = a + H<sup>(i-1)</sup><sub>6</sub></li>
+<li>H<sup>(i)</sup><sub>7</sub> = a + H<sup>(i-1)</sup><sub>7</sub></li>
+</ol>
+</li>
+</ol>
+<p>This gives us a message schedule of the following.</p>
+<pre><code>W[0]: 0x534e5344
+W[1]: 0x80000000
+W[2]: 00000000
+W[3]: 00000000
+W[4]: 00000000
+W[5]: 00000000
+W[6]: 00000000
+W[7]: 00000000
+W[8]: 00000000
+W[9]: 00000000
+W[10]: 00000000
+W[11]: 00000000
+W[12]: 00000000
+W[13]: 00000000
+W[14]: 00000000
+W[15]: 0x00000020</code></pre>
+<p>Once complete, the final hash is as follows: H^(N-1)<sub>0</sub> || H^(N-1)<sub>1</sub> || H^(N-1)<sub>2</sub> || H^(N-1)<sub>3</sub> || H^(N-1)<sub>4</sub> || H^(N-1)<sub>5</sub> || H^(N-1)<sub>6</sub> || H^(N-1)<sub>7</sub></p>
+<p>Computing the hash with the program gives us:</p>
+<p>Hash: d440a8ff c4ea4abe 93fedd94 b82e0d00 b814cc52 b65e6dff 924fccfb 6f7b429d</p>
+<p>In the next and final part of this series, we&#8217;ll take the code (below) used to generate the hash, clean it up, and compare it with some existing implementations.</p>
+<div id="mycode" class="sourceCode">
+<pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;math.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;inttypes.h&gt;</span>
+
+<span class="pp">#define PRIME_NUMBERS 2, 3, 5, 7, 11, 13, 17, 19, 23, 29,  \</span>
+<span class="pp">31, 37, 41, 43, 47, 53, 59, 61, 67, 71, \</span>
+<span class="pp">73, 79, 83, 89, 97, 101, 103, 107, 109, 113, \</span>
+<span class="pp">127, 131, 137, 139, 149, 151, 157, 163, 167, 173, \</span>
+<span class="pp">179, 181, 191, 193, 197, 199, 211, 223, 227, 229, \</span>
+<span class="pp">233, 239, 241, 251, 257, 263, 269, 271, 277, 281, \</span>
+<span class="pp">283, 293, 307, 311</span>
+
+<span class="pp">#define SHA_LENGTH 256</span>
+
+<span class="dt">void</span> print_step(<span class="dt">char</span> * func_name, <span class="dt">uint32_t</span> input, <span class="dt">uint32_t</span> output) {
+  printf(<span class="st">"[%s]: input: %#.8x</span><span class="sc">\n</span><span class="st">"</span>, func_name, input);
+  printf(<span class="st">"[%s]: out  : %#.8x</span><span class="sc">\n</span><span class="st">"</span>, func_name, output);
+}
+
+<span class="kw">struct</span> m_prime {
+  <span class="dt">unsigned</span> <span class="dt">int</span> pos;
+  <span class="dt">uint32_t</span> sqrt_frac, cbrt_frac;
+  <span class="dt">unsigned</span> <span class="dt">long</span> prime;
+  <span class="dt">double</span> sqrt, cbrt;
+};
+
+<span class="kw">struct</span> message_block {
+  <span class="dt">uint32_t</span> block[<span class="dv">16</span>];
+  <span class="kw">struct</span> message_block * next;
+  <span class="dt">uint8_t</span> position;
+};
+
+<span class="kw">struct</span> message_schedule {
+  <span class="dt">uint32_t</span> block[<span class="dv">64</span>];
+  <span class="kw">struct</span> message_schedule * next;
+};
+
+<span class="kw">struct</span> message_block * new_message_block(<span class="dt">void</span>) {
+  <span class="kw">struct</span> message_block * m = calloc(<span class="dv">1</span>, <span class="kw">sizeof</span> *m);
+  m-&gt;next = NULL;
+  <span class="cf">return</span> m;
+}
+
+<span class="dt">void</span> free_message_block(<span class="kw">struct</span> message_block * m) {
+  <span class="cf">if</span> (m == NULL) <span class="cf">return</span>;
+  free_message_block(m-&gt;next);
+  free(m);
+}
+
+<span class="kw">struct</span> message_schedule * new_message_schedule(<span class="dt">void</span>) {
+  <span class="kw">struct</span> message_schedule * m = calloc(<span class="dv">1</span>, <span class="kw">sizeof</span> *m);
+  m-&gt;next = NULL;
+  <span class="cf">return</span> m;
+}
+
+<span class="dt">void</span> free_message_schedule(<span class="kw">struct</span> message_schedule * m) {
+  <span class="cf">if</span> (m == NULL) <span class="cf">return</span>;
+  free_message_schedule(m-&gt;next);
+  free(m);
+}
+
+
+<span class="kw">struct</span> hash {
+  <span class="dt">uint32_t</span> value[<span class="dv">8</span>];
+};
+
+<span class="kw">struct</span> message_block * pad_message(<span class="dt">char</span> * input) {
+  <span class="dt">size_t</span> len = <span class="dv">0</span>;
+  <span class="dt">uint32_t</span> * blk;
+  <span class="dt">uint16_t</span> remainder;
+  <span class="dt">char</span> ch;
+  <span class="kw">struct</span> message_block *head, *p;
+  head = new_message_block();
+
+  p = head;
+
+  <span class="co">// Determine how many message blocks we need.</span>
+  <span class="co">// We need [data][1 bit][zero padding][length]</span>
+  <span class="co">// [data] maximum length 447 bits</span>
+  <span class="co">// [1 bit] length = 1 bit</span>
+  <span class="co">// [zero padding] maximum length 447 bits</span>
+  <span class="co">// [length] 64 bits</span>
+
+  <span class="cf">if</span> (input == NULL) {
+    head-&gt;block[<span class="dv">0</span>] = 1u &lt;&lt; <span class="dv">31</span>;
+    <span class="cf">return</span> head;
+  }
+  
+  <span class="cf">while</span> (*(input + len) != '\<span class="dv">0</span>') {
+    len++; <span class="co">// we have one character</span>
+    blk = &amp;p-&gt;block[p-&gt;position];
+    ch = *(input + len - <span class="dv">1</span>);
+
+    <span class="cf">switch</span> (len % <span class="dv">4</span>) {
+      <span class="cf">case</span> <span class="dv">1</span>:  *blk |= ch &lt;&lt; <span class="dv">24</span>;
+              <span class="cf">break</span>;
+      <span class="cf">case</span> <span class="dv">2</span>:  *blk |= ch &lt;&lt; <span class="dv">16</span>;
+              <span class="cf">break</span>;
+      <span class="cf">case</span> <span class="dv">3</span>:  *blk |= ch &lt;&lt; <span class="dv">8</span>;
+              <span class="cf">break</span>;
+      <span class="cf">default</span>: *blk |= ch;
+              <span class="cf">break</span>;
+    }
+
+    <span class="cf">if</span> (p-&gt;position == <span class="dv">15</span> &amp;&amp; (len % <span class="dv">4</span>) == <span class="dv">0</span>) { <span class="co">// At the end of the block</span>
+      p-&gt;next = new_message_block();
+      p = p-&gt;next;
+    } <span class="cf">else</span> { 
+      <span class="cf">if</span> (len % <span class="dv">4</span> == <span class="dv">0</span>) p-&gt;position++;
+    }
+  }
+
+  <span class="co">// Append the one after this block.</span>
+  p-&gt;block[p-&gt;position] += (1u &lt;&lt; (<span class="dv">32</span> - <span class="dv">8</span> * (len % <span class="dv">4</span>) - <span class="dv">1</span>));
+
+  <span class="co">// Calculate how many zeroes is needed.</span>
+  remainder = (len * <span class="dv">8</span>) % <span class="dv">512</span>;
+  <span class="cf">if</span> (remainder &gt; <span class="dv">447</span>) { <span class="co">// Get a new block</span>
+    p-&gt;next = new_message_block();
+    p = p-&gt;next;
+  }
+
+  <span class="co">// Convert the length to count of binary.</span>
+  len *= <span class="dv">8</span>;
+
+  p-&gt;block[<span class="dv">14</span>] = (<span class="dt">uint32_t</span>) len &gt;&gt; <span class="dv">16</span>;
+  p-&gt;block[<span class="dv">15</span>] = (<span class="dt">uint32_t</span>) len;
+
+  <span class="cf">return</span> head;
+}
+
+<span class="dt">uint64_t</span> calculate_fractional(<span class="dt">double</span> floating) {
+  <span class="co">/* IEEE-754 double-precision</span>
+<span class="co">   * S: 1 bit, sign</span>
+<span class="co">   * E: 11 bits, exponent</span>
+<span class="co">   * M: 53 bits, mantissa</span>
+<span class="co">   */</span>
+
+  <span class="dt">uint64_t</span> f, exponent, mantissa, fractional;
+
+  f = *((<span class="dt">uint64_t</span> *) &amp;(floating));
+  exponent = ((f &gt;&gt; <span class="dv">13</span> * <span class="dv">4</span>) &amp; <span class="bn">0x7ff</span>) - <span class="bn">0x3ff</span>;
+  mantissa = f &amp; <span class="bn">0x000fffffffffffff</span>;
+  fractional = (((mantissa &lt;&lt; exponent) &amp; <span class="bn">0x000ffffffff00000</span>)) &gt;&gt; <span class="dv">5</span> * <span class="dv">4</span>;  <span class="co">/* Only last 4 bytes). */</span>
+
+  <span class="cf">return</span> (<span class="dt">uint32_t</span>) fractional;
+}
+
+<span class="kw">struct</span> m_prime * init_prime_list(<span class="dt">unsigned</span> <span class="dt">int</span> num) {
+  <span class="co">/* Initialise variables. */</span>
+  <span class="dt">unsigned</span> <span class="dt">int</span> x;
+  <span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">int</span> primes[]= {PRIME_NUMBERS};
+  <span class="kw">struct</span> m_prime *p, *mp = malloc(num * <span class="kw">sizeof</span> *mp);
+
+  p = mp;
+
+  <span class="cf">for</span> (x = <span class="dv">0</span>; x &lt; num; x++) {
+    p-&gt;prime = primes[x]; 
+    p-&gt;sqrt = sqrt(primes[x]);
+    p-&gt;cbrt = cbrt(primes[x]);
+    p-&gt;sqrt_frac = calculate_fractional(p-&gt;sqrt);
+    p-&gt;cbrt_frac = calculate_fractional(p-&gt;cbrt);
+
+    p++;
+  }
+
+  <span class="cf">return</span> mp;
+}
+
+<span class="dt">void</span> print_prime_list(<span class="kw">struct</span> m_prime * p, <span class="dt">unsigned</span> <span class="dt">int</span> num) {
+  <span class="dt">unsigned</span> <span class="dt">int</span> x;
+
+  printf(<span class="st">"| Numb | Prme |   Sqrt |   Cbrt | Frac (b10) |   Frac (b2) |</span><span class="sc">\n</span><span class="st">"</span>);
+  printf(<span class="st">"|------|------|--------|--------|------------|-------------|</span><span class="sc">\n</span><span class="st">"</span>);
+
+  <span class="cf">for</span> (x = <span class="dv">0</span>; x &lt; num; x++) {
+    printf(<span class="st">"| %4u | %4lu | %2.4f | %2.4f | %#.8x | %#.8x  |</span><span class="sc">\n</span><span class="st">"</span>, 
+        x + <span class="dv">1</span>,
+        p-&gt;prime,
+        p-&gt;sqrt,
+        p-&gt;cbrt,
+        p-&gt;sqrt_frac,
+        p-&gt;cbrt_frac
+    ); 
+
+    p++;
+  }
+}
+
+<span class="dt">uint32_t</span> rotate_right(<span class="dt">uint32_t</span> x, <span class="dt">uint16_t</span> n) {
+  <span class="cf">return</span> (x &gt;&gt; n) | ((x &lt;&lt; (<span class="dv">32</span> - n)));
+}
+
+<span class="dt">uint32_t</span> hash_sigma_0(<span class="dt">uint32_t</span> x) {
+  <span class="cf">return</span> rotate_right(x, <span class="dv">7</span>) ^ rotate_right(x, <span class="dv">18</span>) ^ (x &gt;&gt; <span class="dv">3</span>);
+}
+
+<span class="dt">uint32_t</span> hash_sigma_1(<span class="dt">uint32_t</span> x) {
+  <span class="cf">return</span> rotate_right(x, <span class="dv">17</span>) ^ rotate_right(x, <span class="dv">19</span>) ^ (x &gt;&gt; <span class="dv">10</span>);
+}
+
+<span class="dt">uint32_t</span> hash_sum_0(<span class="dt">uint32_t</span> x) {
+  <span class="cf">return</span> rotate_right(x, <span class="dv">2</span>) ^ rotate_right(x, <span class="dv">13</span>) ^ rotate_right(x, <span class="dv">22</span>);
+
+}
+<span class="dt">uint32_t</span> hash_sum_1(<span class="dt">uint32_t</span> x) {
+  <span class="cf">return</span> rotate_right(x, <span class="dv">6</span>) ^ rotate_right(x, <span class="dv">11</span>) ^ rotate_right(x, <span class="dv">25</span>);
+}
+
+<span class="dt">uint32_t</span> hash_ch(<span class="dt">uint32_t</span> x, <span class="dt">uint32_t</span> y, <span class="dt">uint32_t</span> z) {
+  <span class="cf">return</span> (x &amp; y) ^ (~x &amp; z);
+}
+
+<span class="dt">uint32_t</span> hash_maj(<span class="dt">uint32_t</span> x, <span class="dt">uint32_t</span> y, <span class="dt">uint32_t</span> z) {
+  <span class="cf">return</span> (x &amp; y) ^ (x &amp; z) ^ (y &amp; z);
+
+}
+ 
+<span class="kw">struct</span> message_schedule * compute_message_schedule(<span class="kw">struct</span> message_block * mb) {
+  <span class="dt">uint8_t</span> i;
+  <span class="kw">struct</span> message_schedule *ms;
+
+  <span class="cf">if</span> (mb == NULL)
+    <span class="cf">return</span> NULL;
+
+  ms = new_message_schedule();
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">16</span>; i++) {
+    ms-&gt;block[i] = mb-&gt;block[i];
+  }
+
+  <span class="cf">for</span> (i = <span class="dv">16</span>; i &lt; <span class="dv">64</span>; i++) {
+    ms-&gt;block[i] = hash_sigma_1(ms-&gt;block[i - <span class="dv">2</span>]) + ms-&gt;block[i - <span class="dv">7</span>] + hash_sigma_0(ms-&gt;block[i - <span class="dv">15</span>]) + ms-&gt;block[i - <span class="dv">16</span>];
+  }
+  ms-&gt;next = compute_message_schedule(mb-&gt;next);
+
+  <span class="cf">return</span> ms;
+}
+
+<span class="kw">struct</span> hash * perform_hash(<span class="kw">struct</span> hash *hash, <span class="kw">struct</span> message_schedule * m, <span class="kw">struct</span> m_prime * p) {
+  <span class="cf">if</span> (m == NULL) <span class="cf">return</span> hash;
+
+  <span class="dt">uint32_t</span> a, b, c, d, e, f, g, h, tx, ty;
+  <span class="dt">uint8_t</span> i;
+  a = hash-&gt;value[<span class="dv">0</span>];
+  b = hash-&gt;value[<span class="dv">1</span>];
+  c = hash-&gt;value[<span class="dv">2</span>];
+  d = hash-&gt;value[<span class="dv">3</span>];
+  e = hash-&gt;value[<span class="dv">4</span>];
+  f = hash-&gt;value[<span class="dv">5</span>];
+  g = hash-&gt;value[<span class="dv">6</span>];
+  h = hash-&gt;value[<span class="dv">7</span>];
+
+  <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">64</span>; i++) {
+    tx = h + hash_sum_1(e) + hash_ch(e, f, g) + (p + i)-&gt;cbrt_frac + m-&gt;block[i];
+    ty = hash_sum_0(a) + hash_maj(a, b, c);
+    h = g;
+    g = f;
+    f = e;
+    e = d + tx;
+    d = c;
+    c = b;
+    b = a;
+    a = tx + ty;
+
+    <span class="co">// printf("%.2u: %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x %#.8x\n", i, a, b, c, d, e, f, g, h);</span>
+  }
+
+  hash-&gt;value[<span class="dv">0</span>] += a;
+  hash-&gt;value[<span class="dv">1</span>] += b;
+  hash-&gt;value[<span class="dv">2</span>] += c;
+  hash-&gt;value[<span class="dv">3</span>] += d;
+  hash-&gt;value[<span class="dv">4</span>] += e;
+  hash-&gt;value[<span class="dv">5</span>] += f;
+  hash-&gt;value[<span class="dv">6</span>] += g;
+  hash-&gt;value[<span class="dv">7</span>] += h;
+
+  <span class="cf">return</span> perform_hash(hash, m-&gt;next, p);
+} 
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[]) {
+    <span class="kw">struct</span> m_prime * p;
+    <span class="kw">struct</span> message_block *h;
+    <span class="kw">struct</span> message_schedule *s;
+    <span class="kw">struct</span> hash * hash = calloc(<span class="dv">1</span>, <span class="kw">sizeof</span> *hash);
+    <span class="dt">unsigned</span> <span class="dt">int</span> i, size = <span class="dv">64</span>;
+
+    p = init_prime_list(size); 
+
+    <span class="cf">if</span> (argc == <span class="dv">1</span>) {
+    h = pad_message(NULL);
+    } <span class="cf">else</span> {
+    h = pad_message(argv[<span class="dv">1</span>]);
+    }
+
+    <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">8</span>; i++)
+      hash-&gt;value[i] = (p + i)-&gt;sqrt_frac;
+
+    s = compute_message_schedule(h);
+
+    hash = perform_hash(hash, s, p);
+
+    printf(<span class="st">"Hash: "</span>);
+    <span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">8</span>; i++)
+      printf(<span class="st">"%8x "</span>, hash-&gt;value[i]);
+    printf(<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>);
+
+    free_message_block(h);
+    free(p);
+}</code></pre>
+</div>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>

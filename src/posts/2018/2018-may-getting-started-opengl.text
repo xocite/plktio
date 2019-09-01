@@ -1,0 +1,17 @@
+---
+title: 'Getting started with OpenGL'
+pagetitle: 'Getting started with OpenGL'
+author: 'Antony Jepson'
+date: '8 May 2018'
+abstract: 'A quick guide to launching an OpenGL instance in Windows using Linux
+best practices.'
+keywords:
+- OpenGL
+article: true
+---
+I've been wanting to play around with some graphics work for a while now and
+while I've used Blender for a few renders, I've never sat down and set up a
+programming environment on my computer.  What follows is a short tutorial on how
+to get started in OpenGL on Windows -- but still using the Linux conventions
+that I'm familiar with.
+

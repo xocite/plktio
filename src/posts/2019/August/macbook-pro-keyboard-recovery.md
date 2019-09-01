@@ -1,7 +1,7 @@
 ---
 path: "/writing/macbook-pro-keyboard-recovery"
 date: "2019-08-16"
-title: "Next steps after getting your Macbook Pro Keyboard repaired"
+title: "Next steps after getting your Macbook Pro keyboard repaired"
 commentary: false
 attract: "Follow these steps to avoid heartache when you get your MBP back."
 ---

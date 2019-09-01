@@ -1,0 +1,19 @@
+Portage Quick Reference
+
+I use Gentoo everyone within a VM on my
+[workstation](./2018-april-workstation.html) everyday but sometimes I
+don't recall all the commands for managing my package installations.
+Here's a quick reference that you can view on a GUI with Firefox or via
+the CLI with Lynx or another browser.
+
+Make sure you have these three critical tools installed: gentoolkit,
+eix, and
+
+### Bash says command not found but you know it's installed
+
+    -bash: somecommand: command not found is very annoying but you can
+    use portage to check if the package you installed has this file.
+    $ equery files package | grep executable-name
+
+    April 2018
+

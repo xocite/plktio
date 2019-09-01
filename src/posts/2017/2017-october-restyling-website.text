@@ -1,0 +1,33 @@
+---
+title: 'Restyling the website'
+pagetitle: 'Restyling the website'
+author: 'Antony Jepson'
+date: '29 October 2017'
+abstract: 'A note on some changes in the website layout.'
+keywords:
+- HTML
+- CSS
+article: true
+---
+I have been publishing articles on the web since 2008 — and tinkering
+with other websites (e.g. Geocities) since well before that. Over time,
+the size of each webpage has exploded. Going forward, you'll be able to
+view my website by only retrieving one file — this one — and I endeavour
+to keep it to a manageable size.
+
+Right now, all HTML/CSS contained herein is hand written. Over time I'll
+develop tools on the backend to automate portions of the page (e.g.
+translations, versioning, and site navigation). You can rest assured
+that you'll never see any Javascript on my site.
+
+For testing the layout, I only test for support with 1024x768 on latest
+Firefox and using the iPhone 6 layout on Chrome. Whitespace behavior is
+specified by me in the document. If I want pixel perfect display, I'll
+likely use an image map.
+
+If the display is broken in your environment, please let me know.
+Untested but I'd like the website to perform well in screenreaders as
+well. Also let me know if this isn't the case.
+
+\
+29 October 2017

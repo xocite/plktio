@@ -1,0 +1,90 @@
+---
+title: 'Workstation'
+pagetitle: 'Workstation'
+author: 'Antony Jepson'
+date: 'April 2018'
+abstract: 'What I use to write this blog.'
+keywords:
+- OpenGL
+- Dell
+- M6800
+- Windows 10 Pro for Workstations
+- VMWare
+article: true
+---
+It's been over three years since I purchased my Dell M6800 and it's
+still my trusty workhorse. My habits have evolved a lot since I wrote
+the original ["My
+Desktop"](https://antonyjepson.wordpress.com/2008/07/06/my-desktop-the-terminal/)
+post back in 2008 and since it's almost the ten year anniversary, why
+not take a another look?
+
+The only OS installed is Windows 10 Pro for Workstations. It's
+absolutely rock solid and I haven't had any crashes to date. While I
+used to dual boot for performance reasons, I now virtualise the
+operating systems I want to run instead. Since 2008, performance of
+hypervisors and CPUs have improved tremendously and, with the exception
+of 3D graphics performance (abetted somewhat with Intel's VT-d
+extension), there's no reason to dual boot anymore.
+
+For system administration, both remote and local, I run Gentoo in a VM
+and regularly export the VM to both external and encrypted online
+storage. Additionally, I occasionally tinker with
+[Enlightenment](https://www.enlightenment.org) WM development and use VM
+as a testbed for feature changes.
+
+For iTunes, Adobe software such as Photoshop or Lightroom, and web
+browsing, I use a Windows 10 Pro N VM. It's also very solid although I
+have noticed some performance issues due to Windows Defender
+anti-malware scans. I'm not convinced this is good for my hard disc long
+term and would be something I would disable if I could. Modifying the
+Windows Task Scheduler to not run as frequently doesn't seem as reliable
+as I expected.
+
+The use of VMs also provides some security providing that you trust the
+host OS. I recently booted up my old 2011 Macbook Air and noticed that
+web performance was very poor using Safari on macOS Sierra compared to
+macOS High Sierra. This indicates to me that the use of JavaScript is
+increasing and further optimisations are required to open the same
+websites from last year. This is a worrying trend -- browsers requiring
+more access to the system in the name of PWA (Progressive Web Apps);
+WebGL; and a whole bunch of other acronyms that seem to strengthen my
+vision that we should stop moving everything to the web. To alleviate
+some concerns, I started running my web browsing in a Chrome OS instance
+provided by Neverware. They have a VM appliance that can be imported
+into VMWare Workstation and used with little overhead.
+
+On the host OS, I only use a few essential (as deemed by me) programs:
+
+-   Microsoft Edge: default browser
+-   Storage Spaces with ReFS: used for backing up my data
+-   SysInternals Suite: monitoring processes and system performance
+-   OpenVPN: eschewing monitoring when using public Wi-Fi
+-   7-Zip: the trusty compressed file handler
+-   Bitcoin Core: blockchain storage
+-   G-Force: my favourite music visualiser
+-   VMWare Workstation: the hypervisor for my VMs
+-   Android Emulator: for running any essential apps without having to
+    open my phone
+
+It's a light setup and seems very comfortable.
+
+On the virtualised Windows, I run the following:
+
+-   iTunes: for syncing with phone and sampling songs
+-   Adobe Photoshop/Lightroom: for management of my many many gigabytes
+    of photos and videos
+
+When I'm not at the computer, I typically switch between two phones
+depending on the activity at hand. I've found that few extra apps are
+needed beyond the ones that come with the device. Here are the
+essentials I use on a daily basis:
+
+-   42 Calc: for currency conversions and quick formulas
+-   Omnifocus: for tracking tasks and GTD
+-   Day One: for logging various important points in my life
+-   Telegram: for messages and super groups
+-   Redpipe: for YouTube
+
+\
+April 2018

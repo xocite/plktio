@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>Adding additional email accounts to your email setup &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; Adding additional email accounts to your email setup Comments Feed" href="https://antonyjepson.co.uk/adding-additional-email-accounts-to-your-email-setup/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Setting up Mutt' href='index.html?p=47' />
+<link rel='next' title='Configuring the default prompt (PS1)' href='index.html?p=53' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=45" />
+<link rel='shortlink' href='index.html?p=45' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>Adding additional email accounts to your email setup</header>
+<em>Upon hearing that my college offers email access through its POP and SMTP servers, I immediately set out to integrate it into my email setup. Today I will show you how. Note: I use Mutt to read my email, getmail to retrieve my mail, procmail to filter my mail, and msmtp to send my mail.  [&hellip;]</em><br /><em>15 July 2008</em>
+<p>Upon hearing that my college offers email access through its POP and SMTP servers, I immediately set out to integrate it into my email setup.</p>
+<p>Today I will show you how.</p>
+<p><em>Note: I use <a href="http://www.mutt.org">Mutt</a> to read my email, <a href="http://pyropus.ca/software/getmail/">getmail</a> to retrieve my mail, <a href="http://www.procmail.org">procmail</a> to filter my mail, and <a href="http://msmtp.sourceforge.net/">msmtp</a> to send my mail.  This tutorial can also be used for configuring a new account in a similar setup.<br />
+</em></p>
+<p>Because my email setup is quite complicated, this will take longer to configure than it would with a mail client such as Thunderbird or Outlook.  However, I enjoy the level of customization offered by such a setup.</p>
+<h2>1. Setting up getmail</h2>
+<p>First, make sure that you have the <strong>.getmail</strong> directory in your home dir.  If not, create it (mkdir -m 700 ~/.getmail)</p>
+<blockquote>
+<pre>~ %  ls -la | grep getmail
+<span style="color:#993300;">drwx------  2 antony antony 4.0K 2008-07-09 17:30 .getmail/</span></pre>
+</blockquote>
+<p>Change to the <strong>.getmail</strong> directory and create the account file.</p>
+<blockquote>
+<pre>~ %  cd .getmail
+.getmail %  touch getmailrc_college</pre>
+</blockquote>
+<p>Edit the file.  <em>Note: <strong>!$</strong> means the last space separated word from the previous command, in this case &#8220;getmailrc_college&#8221;</em></p>
+<blockquote>
+<pre>.getmail %  vim !$
+<span style="color:#993300;">1 [retriever]
+2 type = SimplePOP3SSLRetriever
+3 server = pop.college.edu
+4 username = name
+5 port = 995
+6 password = password
+7
+8 [destination]
+9 type = MDA_external
+10 path = /usr/bin/procmail</span></pre>
+</blockquote>
+<p>Change the file permissions (read, write for user)</p>
+<blockquote>
+<pre>.getmail %  chmod 600 getmailrc_college</pre>
+</blockquote>
+<h2>2. Setting up procmail</h2>
+<p>All we have to do is add a filter for email from the college domain address.  <em>Note: Because my college email address can have a number 0-9 appended to the end of the username, I used the regex <strong>[0-9]</strong>, which matches one digit.gt<br />
+</em></p>
+<blockquote>
+<pre>.getmail %  cd
+~ % vim ~/.procmailrc
+<span style="color:#993300;">20 :0
+21 * ^TO_name[0-9]@college\.edu
+22 college/</span></pre>
+</blockquote>
+<h2>3. Setting up msmtp</h2>
+<p>This is the most involved step.</p>
+<p>Security is always first, so check the available authentication options of the server.  I&#8217;ll use Gmail as an example (yep, straight from the manpage).<strong><em></em></strong></p>
+<blockquote>
+<pre>~ %  msmtp --serverinfo --host=smtp.gmail.com --tls=on --port=587 --tls-certcheck=off
+<span style="color:#993300;">SMTP server at smtp.gmail.com (yw-in-f109.google.com [74.125.47.109]), port 587:
+    mx.google.com ESMTP 6sm2875694ywp.3
+TLS certificate information:
+    Owner:
+        Common Name: smtp.gmail.com
+        Organization: Google Inc
+        Locality: Mountain View
+        State or Province: California
+        Country: US
+  <strong> </strong></span><span style="color:#993300;"><strong> Issuer:
+        Common Name: Thawte Premium Server CA</strong>
+        Organization: Thawte Consulting cc
+        Organizational unit: Certification Services Division
+        Locality: Cape Town
+        State or Province: Western Cape
+        Country: ZA
+[truncated]
+Capabilities:
+    SIZE 28311552:
+        Maximum message size is 28311552 bytes = 27.00 MB
+<strong>    STARTTLS:
+        Support for TLS encryption via the STARTTLS command</strong>
+    AUTH:
+        Supported authentication methods:
+        PLAIN LOGIN</span></pre>
+</blockquote>
+<p>The important part here is the issuer of the certificate (shown by the Common Name).  In this case, the issuer is &#8220;<strong>Thawte Premium Server CA</strong>&#8221; so we need to download that certificate from the Thawte <a href="http://www.thawte.com/roots">website</a> and place it in our <strong>~/.certs</strong> directory.</p>
+<blockquote>
+<pre>~ %  cd ~/.certs
+.certs %  unzip thawte-roots.zip -d thawte [truncated output]
+.certs %  cd thawte
+thawte %  cd Thawte\ Server\ Roots
+Thawte Server Roots %  ls
+<span style="color:#993300;">Thawte Server Roots.txt    ThawtePremiumServerCA.cer      ThawteServerCA.509  ThawteServerCA_b64.txt
+ThawtePremiumServerCA.509  ThawtePremiumServerCA_b64.txt  ThawteServerCA.cer</span>
+Thawte Server Roots %  cp ThawtePremiumServerCA.cer ../../
+Thawte Server Roots %  cd !$
+.certs %  ls
+<span style="color:#993300;">ThawtePremiumServerCA.cer  thawte/  thawte-roots.zip</span>
+.certs %  rm -r thawte*</pre>
+</blockquote>
+<p>Now you can use TLS, so edit your <strong>~/.msmtprc</strong> file</p>
+<blockquote>
+<pre>.certs %  cd
+~ % vim .msmtprc
+<span style="color:#993300;">21 account college
+22 host smtp.college.edu
+23 from name@college.edu
+24 user name@college.edu
+25 password somepassword
+26 port 587
+<strong>27 auth on</strong>
+<strong>28 tls on
+29 tls_trust_file /home/antony/.certs/ThawtePremiumServerCA.crt</strong></span></pre>
+</blockquote>
+<h2>4. Next, configure Mutt for account switching.</h2>
+<blockquote>
+<pre>~ %  cd .mutt</pre>
+</blockquote>
+<p>Create a profile for each account.  Because I include my email address in my signature, I have to switch to a different signature when I change email accounts.  The <strong>unmy_hdr</strong> resets the <strong>my_hdr</strong> variable, which is then defined by the following <strong>my_hdr</strong>.  <strong><span style="color:#993300;"><span style="color:#000000;">set sendmail=</span></span></strong><span style="color:#993300;"> </span>tells Mutt to use a different sendmail command.  And <strong>set compose_format</strong> changes the display at the bottom of the screen so I know which mail account I am using.</p>
+<blockquote>
+<pre>~ % vim muttrc.local1
+<span style="color:#993300;">  1 # default Mutt profile
+  2 set signature="~/.signature"
+  3 unmy_hdr
+  4 my_hdr From: Antony Jepson &lt;email@gmail.com&gt;
+  5 my_hdr Reply-To: Antony Jepson &lt;email@gmail.com&gt;
+  6 set sendmail="/usr/bin/msmtp --account default"
+  7 set compose_format="-- default Mutt: Compose [Approx. msg size: %l] Atts:%a]%&gt;-"</span></pre>
+</blockquote>
+<blockquote>
+<pre>~ % vim muttrc.local2
+<span style="color:#993300;">  1 # college Mutt profile
+  2 set signature="~/.signature2"
+  3 unmy_hdr
+  4 my_hdr From: First Last &lt;name@college.edu&gt;
+  5 my_hdr Reply-To: First Last &lt;name@college.edu&gt;
+  6 set sendmail="/usr/bin/msmtp --account college"
+  7 set compose_format="-- college Mutt: Compose [Approx. msg size: %l] Atts:%a]%&gt;-"</span></pre>
+</blockquote>
+<p>All we have to do is add a keyboard-binding that will source each different profile.  This configuration will switch to a different profile when I press Control-q and Control-w.</p>
+<blockquote>
+<pre>.mutt %  vim macros.rc
+<span style="color:#993300;">  4 macro index "\Cq" ":source ~/.mutt/muttrc.local1\n" "Load default profile"
+  5 macro index "\Cw" ":source ~/.mutt/muttrc.local2\n" "Load college profile"</span></pre>
+</blockquote>
+<blockquote>
+<p>And, if you are not already sourcing this rc file in the default mutt configuration, add it.</p>
+<pre>.mutt %  echo "source ~/.mutt/macros.rc" &gt;&gt; ~/.mutt/muttrc</pre>
+</blockquote>
+<h2>5. Finally, because I will be using this address for the next four years, I&#8217;ll add it to my gpg key.</h2>
+<blockquote>
+<pre>.mutt %  cd
+~ %  gpg --edit-key Antony\ Jepson [truncated output]
+<span style="color:#993300;">Command&gt; adduid
+Real name: Antony Jepson
+Email address: name@college.edu
+Comment: College email
+You selected this USER-ID:
+    "Antony Jepson (College email) &lt;name@college.edu&gt;"
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+You need a passphrase to unlock the secret key for
+    user: "Antony Jepson (College email) &lt;name@college.edu&gt;"
+    [truncated]
+    Passphrase: somepassphrase
+Command&gt; save</span></pre>
+</blockquote>
+<p>Finally, send your updated key to the keysever.</p>
+<blockquote>
+<pre>~ %  gpg --send-key name@college.edu</pre>
+</blockquote>
+<p>And that&#8217;s it.  You now (or I, at least) have a working, secure, additional, Mutt-enabled, email account!</p>
+<p>I&#8217;m still getting used to the WYSIWYG WordPress formatting toolbar, I&#8217;ll make (hopefully better) use of it as I write more posts.</p>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>

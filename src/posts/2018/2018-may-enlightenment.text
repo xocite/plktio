@@ -1,0 +1,42 @@
+---
+title: 'Setting up Enlightenment on Gentoo'
+pagetitle: 'Setting up Enlightenment on Gentoo'
+author: 'Antony Jepson'
+date: '16 May 2018'
+abstract: 'A guide on setting up the beloved Enlightenment window manager on Gentoo'
+keywords:
+- Enlightenment
+- Window manager
+- Gentoo
+---
+Since I started using [dwm](https://dwm.suckless.org/) as my main window manager
+on Linux, I've still had my eye on Enlightenment as an alternative.
+Surprisingly, [Tizen](https://www.tizen.org/), the open OS for IoT devices, is
+built upon the Enlightenment Foundation Library.  Hopefully this means the
+project will continue to grow over the coming years.
+
+Unfortunately, getting the system up and running with the latest source has
+never been an achievable task for me -- mainly because I haven't had time to
+iron out all the kinks.  However, I intend to get everything working this time
+and document below.
+
+### Requirements
+Some information about my system (likely out of date by the time this is
+published):
+* Linux 4.9.76
+* 512MB memory
+* MESA 3D drivers
+
+The dependencies listed on the download page are as follows:
+* GCC
+* make
+* check
+* libpam
+* freetype
+* libpng
+* libjpeg
+* zlib
+* ... and a lot more
+
+We can jumpstart getting these installed by looking at the ebuild for E17.
+

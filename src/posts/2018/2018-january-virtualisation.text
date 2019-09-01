@@ -1,0 +1,57 @@
+---
+title: 'Virtualisation with KVM'
+pagetitle: 'Virtualisation with KVM'
+author: 'Antony Jepson'
+date: '31 January 2018'
+abstract: 'A quick guide to launching an OpenGL instance in Windows using Linux
+best practices.'
+keywords:
+- OpenGL
+article: true
+---
+I've been wanting to play around with some graphics work for a while now and
+while I've used Blender for a few renders, I've never sat down and set up a
+programming environment on my computer.  What follows is a short tutorial on how
+to get started in OpenGL on Windows -- but still using the Linux conventions
+that I'm familiar with.
+
+
+I run a dual-boot Windows/Linux system on my laptop and have been doing
+so for almost a decade. This gives me the flexibility to run games and
+certain proprietary software on Windows when needed (such as VMware
+Workstation and Adobe Photoshop) and use Linux for development and
+server administration. I recently decided to switch from Gentoo to
+Debian - but this time only use the programs in Debian's main
+repository.
+
+This ruled out installing VMWare or Virtualbox so I exported my main
+virtual machine from VMware and imported it into QEMU/KVM using the
+below set up. Finding documentation to do this was a bit harder than
+expected but once I read enough manpages the process was extremely
+straightforward.
+
+Begin by exporting the virtual machine into the OVF format. OVF is a
+open packaging format for virtual machines. This will make sure that any
+snapshots you have or cloned machines (you may be surprised at the
+parent tree for a given VM) are exported into a portable format.
+
+Once you have the exported machine, place it in an accessible location
+from the Linux installation. It's usually a good practice to place the
+VM on a separate physical volume from the host.
+
+Install the necessary tools on the Linux installation and add yourself
+to the virtualisation groups.
+
+    # apt install qemu-kvm libvirt-clients libvirt-daemon-system virtinst
+    # adduser  libvirt
+    # adduser  libvirt-qemu
+
+Import the VM into the QEMU format so you can support snapshots and save
+space.
+
+`$ virt-convert .ovf -i ovf -D qcow2 --destination ~/vm --noautoconsole`
+
+Now, you can use virt-manager to configure the virtual machine by
+importing the qcow2 image.
+
+After this, it should be pretty straightforward using the GUI.

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>Google public WiFI &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; Google public WiFI Comments Feed" href="https://antonyjepson.co.uk/google-public-wifi/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Arch Linux on Dell M6800' href='index.html?p=508' />
+<link rel='next' title='Cloning Logical Volumes on Linux' href='index.html?p=524' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=520" />
+<link rel='shortlink' href='index.html?p=520' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>Google public WiFI</header>
+<em>Short post: when you agree to the terms and conditions of Google sponsored WiFi (e.g. at Starbucks) your DNS resolution settings are updated to point to Google&#8217;s DNS servers. While this does result in hands-off protection from malicious websites it also enables Google to track your browsing habits and gather a large representative sample of [&hellip;]</em><br /><em>29 August 2015</em>
+<p>Short post: when you agree to the terms and conditions of Google sponsored WiFi (e.g. at Starbucks) your DNS resolution settings are updated to point to Google&#8217;s DNS servers.  While this does result in hands-off protection from malicious websites it also enables Google to track your browsing habits and gather a large representative sample of the habits of people that use that particular WiFi network.<br />
+In Linux, look at your /etc/resolv.conf to determine if your DNS server has changed.  Google&#8217;s servers are: 8.8.8.8 and 8.8.4.4.<br />
+I recommend checking this file each time you connect to a public WiFi network.</p>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>

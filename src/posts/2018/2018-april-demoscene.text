@@ -1,0 +1,42 @@
+---
+title: 'Demoscene'
+pagetitle: 'Demoscene'
+author: 'Antony Jepson'
+date: 'April 2018'
+abstract: 'Some comments on the scene of graphical demos'
+keywords:
+- Demoscene
+- intro
+- 64k
+- Revision Party
+- fr-041
+article: true
+---
+I've been wanting to play around with some graphics work for a while now and
+while I've used Blender for a few renders, I've never sat down and set up a
+programming environment on my computer.  What follows is a short tutorial on how
+to get started in OpenGL on Windows -- but still using the Linux conventions
+that I'm familiar with.
+
+
+The demoscene is something that's fascinated me for years. If you
+haven't heard of it, it's the art of making a computer program (usually
+size constrained) that produces outstanding visual effects synced with
+music. There's a wide variety of target platforms including Windows,
+Linux, MS-DOS, and even the old Amiga!
+
+I'm surprised to see that there are still regular
+[competitions](https://2018.revision-party.net/) being held around the
+world.
+
+Here are some of my favourites:
+
+-   fr-041: debris
+    ([YouTube](https://www.youtube.com/watch?v=ffPPmrLbTyw)): Very
+    impressive city scape
+-   luma - mercury
+    ([YouTube](https://www.youtube.com/watch?v=WBuoyegCeXI)): Stunning
+    light effects
+-   H - Immersion - Ctrl-Alt-Test
+    ([YouTube](https://www.youtube.com/watch?v=HpAMtE4i8zg)): Very
+    believable underwater adventure

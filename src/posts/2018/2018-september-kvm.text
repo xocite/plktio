@@ -1,0 +1,60 @@
+---
+title: 'Nvidia GPU PCI Passthrough on Ubuntu'
+pagetitle: 'Nvidia GPU PCI Passthrough on Ubuntu'
+author: 'Antony Jepson'
+date: '12 September 2018'
+abstract: 'Running Windows with a secondary graphics card'
+keywords:
+- KVM
+- Linux
+- Passthrough
+- Nvidia
+---
+I've went through numerous configurations over the years to balance my Steam
+gaming addiction with my Linux workhorse setup.  My predominant and preferred
+configuration is dual-booting with a fast bootup device.  Usually rebooting
+takes less than a minute and lets me focus on the task at hand.  
+
+Recent developments in virtual machines have indicated that I may be able to run Windows side-by-side with the Linux host and still have near-native performance and D3D12 support, with the help of a second graphics card.
+
+Intrigued, I have detailed my attempts below to get this to work in a
+reproducible manner using KVM.  Follow along and let me know if you can
+reproduce this setup.
+
+In this tutorial, I try to avoid the common pitfalls of this not working by using a systematic approach.  As such, this will be a pretty long tutorial.
+
+Here's the configuration of the host PC.
+
+| Motherboard: ASUS B-350F
+| CPU: AMD Ryzen 5 1600X
+| GPU 1: NVIDIA GTX 1060 6GB
+| GPU 2: NVIDIA GTX 1030 2GB
+| OS: Ubuntu 18.04 (4.15.0-33-generic)
+
+Guides used: 
+
+# Setting up the launchpad
+We'll begin by starting fresh by creating a separate configuration from the
+main system.  This will let us isolate errors from any changes that have been made to the host system.
+
+Download Ubuntu base [wiki](https://wiki.ubuntu.com/Base) to get started.
+
+    $ wget http://cdimage.ubuntu.com/ubuntu-base/releases/18.04/release/ubuntu-base-18.04.1-base-arm64.tar.gz
+
+Set up a filesystem containing all the virtualisation components.  In this example, I use LVM.
+
+    pwd: /home/user
+    $ sudo lvcreate -L 32GB -n kvm storage
+    $ sudo mkfs.ext4 /dev/mapper/storage-kvm
+    $ sudo mkdir /media/kvm
+    $ sudo mount /dev/mapper/storage-kvm /media/kvm
+
+Unpack the base installation and download a [kernel](https://packages.ubuntu.com/bionic-updates/kernel/linux-image-4.15.0-33-lowlatency) to boot from.
+    $ cd /media/kvm
+    $ sudo tar xf /home/user/ubuntu-base-18.04.1-base-arm64.tar.gz
+    $ 
+
+
+
+
+

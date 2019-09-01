@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="themes/test/style.css" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144235537-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-144235537-2');
+</script>
+<title>Generating smooth sine tone output on iOS &#8211; AJONLINE</title>
+<link rel='dns-prefetch' href='https://s.w.org/' />
+<link rel="alternate" type="application/rss+xml" title="AJONLINE &raquo; Generating smooth sine tone output on iOS Comments Feed" href="https://antonyjepson.co.uk/generate-smooth-sine-tone-async/feed/" />
+<link rel='stylesheet' id='wp-block-library-css'  href='css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+<link rel='https://api.w.org/' href='https://antonyjepson.co.uk/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc.php?rsd" />
+<link rel='prev' title='Installing Jupyter on macOS Mojave' href='index.html?p=626' />
+<link rel='next' title='Quickly setting up a local Tiny Tiny RSS instance with Docker' href='index.html?p=675' />
+<meta name="generator" content="WordPress 5.2.2" />
+<link rel="canonical" href="index.html?p=630" />
+<link rel='shortlink' href='index.html?p=630' />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="32x32" />
+<link rel="icon" href="uploads/2018/11/favicon.ico" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="uploads/2018/11/favicon.ico" />
+<meta name="msapplication-TileImage" content="https://antonyjepson.co.uk/wp-content/uploads/2018/11/favicon.ico" />
+</head>
+<body>
+<div class="gc">
+<div class="gi0">
+<nav>
+<img class="logo" src="uploads/2018/11/favicon.ico" />
+<header class="nav">
+<a href="https://antonyjepson.co.uk">AJONLINE</a>
+</header>
+<br /><br /><br />
+<li class="page_item page-item-80"><a href="index.html?p=80">About</a></li>
+<li class="page_item page-item-596"><a href="index.html?p=596">Contact and Consulting</a></li>
+<li class="page_item page-item-668"><a href="index.html?p=668">License</a></li>
+<li class="page_item page-item-613"><a href="index.html?p=613">Resume</a></li>
+<br />
+</nav>
+</div> <!-- end gi0 -->
+<div class="gi1">
+
+<article>
+<header>Generating smooth sine tone output on iOS</header>
+<em>It has been several years since I studied signal processing in depth. I&#8217;ve been working on a pet project recently and needed to generate a sine tone on iOS. I almost gave up and just dragged in the AudioKit framework but decided it would be more rewarding to try and create it myself. So &#8212; [&hellip;]</em><br /><em>20 December 2018</em>
+<p>It has been several years since I studied signal processing in depth. I&#8217;ve been working on a pet project recently and needed to generate a sine tone on iOS. I almost gave up and just dragged in the AudioKit framework but decided it would be more rewarding to try and create it myself.</p>
+<p>So &#8212; as a net positive, I&#8217;m going to describe how I built the sine tone generator. There&#8217;s probably some mistakes or inaccuracies in the mathematical notation or use of code even though it works to my satisfaction.</p>
+<p>For the problem statement: generate a 200Hz sinusoidal PCM tone.</p>
+<h2>Theory</h2>
+<p>Let&#8217;s start with a simple sine wave, defined by y = sin(x).</p>
+<p><img class="alignnone size-full wp-image-638" src="uploads/2018/12/smooth-sine-tone-1-1.png" alt="" width="699" height="425" /></p>
+<p>We can see this wave has amplitude 1, a frequency of 1/(2 * pi) Hz, and a phase of 0, defined by the classic equation.</p>
+<p><img class="alignnone size-full wp-image-634" src="uploads/2018/12/smooth-sine-tone-2.png" alt="" width="282" height="26" /></p>
+<p>Now, when considering a 200Hz tone, the frequency or oscillations per second becomes 200. Note that we need to increase the number of points in the linear vector to account for the new frequency.</p>
+<p><img class="alignnone size-full wp-image-636" src="uploads/2018/12/smooth-sine-tone-3.png" alt="" width="637" height="490" /></p>
+<p>Great. In this figure, we show a one second representation of the sine waves output. Typically, for a CD quality PCM tone, we need to sample this one second representation 44100 times a second. As the frequency of this wave is only 200 Hz, we satisfy the <a href="https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem">sampling theorem</a>.</p>
+<p>Let&#8217;s zoom into the graph and see the sampling, also known as quantisation, of the wave.</p>
+<p><img class="alignnone size-full wp-image-640" src="uploads/2018/12/smooth-sine-tone-4-1.png" alt="" width="800" height="750" /></p>
+<p>Usually, audio is placed into buffers and then queued for playback. In this example, one buffer will be enqueued while the other provide smooth playback. The buffer is small to reduce memory impact.</p>
+<p>Assuming each buffer is 512 samples, let&#8217;s see how the wave is partitioned after 0.05 seconds.</p>
+<p><img class="alignnone size-medium wp-image-642" src="uploads/2018/12/smooth-sine-tone-5.png" alt="" width="588" height="600" /></p>
+<p><img class="alignnone size-full wp-image-641" src="uploads/2018/12/smooth-sine-tone-6.png" alt="" width="390" height="264" /></p>
+<p>Here are the 5 buffers, represented by different coloured lines, that represent the segmentation of 0.05 seconds of the sinusoidal tone.</p>
+<h2>Code</h2>
+<p>Let&#8217;s try and build up to the above in a real code example. We&#8217;ll first build the skeleton in Swift Playgrounds to generate the tone and then we&#8217;ll optimise the execution.</p>
+<p>We&#8217;ll use the AVAudio parts of the AVFoundation for the initial concept. We&#8217;ll be looking into the classes and subclasses of AVAudio.</p>
+<p><img class="alignnone size-full wp-image-649" src="uploads/2018/12/smooth-sine-tone-7.png" alt="" width="392" height="285" /></p>
+<p>Let&#8217;s initialise an engine that we&#8217;ll use for playback.</p>
+<p><img class="alignnone size-full wp-image-648" src="uploads/2018/12/smooth-sine-tone-8.png" alt="" width="618" height="297" /></p>
+<p>Next, we&#8217;ll create the audio buffer that we&#8217;ll use for the sine tone. We&#8217;ll also create a player node that we&#8217;ll use to pipe the audio to the engine and declare the format of the PCM buffer.</p>
+<p><img class="alignnone size-full wp-image-650" src="uploads/2018/12/smooth-sine-tone-9.png" alt="" width="516" height="232" /></p>
+<p>Sorted! Now, let&#8217;s generate the 200Hz tone, taking into account the theory above. Initially we&#8217;ll use a really large buffer and scale it back later. Note, we&#8217;re being a bit naughty here and assuming all the allocation succeeds.</p>
+<p><img class="alignnone size-full wp-image-651" src="uploads/2018/12/smooth-sine-tone-10.png" alt="" width="683" height="579" /></p>
+<p>Awesome. It sounds good albeit runs a bit slow in Playgrounds. We can vectorise the equation later for better performance. Before we abstract the implementation into something reusable, let&#8217;s try and use multiple buffers.</p>
+<p><img class="alignnone size-full wp-image-652" src="uploads/2018/12/smooth-sine-tone-11a.png" alt="" width="588" height="515" /></p>
+<p><img class="alignnone size-full wp-image-653" src="uploads/2018/12/smooth-sine-tone-11b.png" alt="" width="340" height="513" /></p>
+<p>This was pretty simple. We just added another for loop to encapsulate the buffer generation.</p>
+<p>Now, that we have the serial flow understood. We can now start building a class to simplify things.</p>
+<p><img class="alignnone size-full wp-image-657" src="uploads/2018/12/smooth-sine-tone-12.png" alt="" width="493" height="376" /></p>
+<p>This following code will play a tone given a certain frequency, phase, and amplitude. Here is the final code that generates a 200Hz tone for five seconds.</p>
+<p>There&#8217;s more opportunity here to handle scheduling of multiple buffers, overlapping with system sounds, ramping of frequencies, etc but this works as a good first pass.</p>
+<p><code><br />
+// Antony Jepson<br />
+// A simple sine tone generator<br />
+// Developed in Xcode 10.1 for iOS 12</code></p>
+<p>import Foundation<br />
+import AVFoundation</p>
+<p>public struct Constants {<br />
+static let pcmSampleRateFloat: Float = 44100.0<br />
+static let pcmSampleRateFloat32: Float32 = 44100.0<br />
+static let pcmSampleRateDouble: Double = 44100.0<br />
+static let defaultBufferLengthInSeconds: Double = 0.2<br />
+}</p>
+<p>public enum ToneTypes {<br />
+case sine<br />
+case cosine<br />
+}</p>
+<p>// Tone: representation of a sinusoidal wave<br />
+public struct Tone {<br />
+private let twoPi: Float32 = Float32.pi * 2<br />
+public var ToneType: ToneTypes = .sine<br />
+public var frequency: Float32 = 100.0<br />
+public var amplitude: Float32 = 0.2<br />
+public var phase: Float32 = 0.0</p>
+<p>public func eval() -&gt; Float32 {<br />
+switch ToneType {<br />
+case .sine:<br />
+return amplitude * sin(twoPi * frequency + phase)<br />
+case .cosine:<br />
+return amplitude * cos(twoPi * frequency + phase)<br />
+}<br />
+}<br />
+}</p>
+<p>public class ToneGenerator {<br />
+private let audioBufferSize: AVAudioFrameCount = AVAudioFrameCount(Constants.pcmSampleRateDouble * Constants.defaultBufferLengthInSeconds)<br />
+private let audioFormat: AVAudioFormat = AVAudioFormat(standardFormatWithSampleRate: Constants.pcmSampleRateDouble, channels: 2)!<br />
+private var eng: AVAudioEngine = AVAudioEngine()<br />
+private var pn: AVAudioPlayerNode = AVAudioPlayerNode()<br />
+private var ab: AVAudioPCMBuffer<br />
+private var isPlaying: Bool = false<br />
+private var dq: DispatchQueue = DispatchQueue(label: &#8220;ToneGenerator&#8221;)<br />
+private var tone: Tone</p>
+<p>init(tone: Tone) {<br />
+self.tone = tone<br />
+ab = AVAudioPCMBuffer(pcmFormat: audioFormat,<br />
+frameCapacity: audioBufferSize)!<br />
+eng.attach(pn)<br />
+eng.connect(pn, to:eng.mainMixerNode, format: audioFormat)</p>
+<p>do {<br />
+try eng.start()<br />
+} catch {<br />
+print(&#8220;AVAudioEngine didn&#8217;t start.&#8221;)<br />
+}<br />
+}</p>
+<p>private func fillBuffer(_ buffer: AVAudioPCMBuffer) -&gt; Void {<br />
+var initialisedBuffer: [Float32] = Array(<br />
+stride(from: 0.0 as Float32,<br />
+through: Float32(self.audioBufferSize &#8211; 1),<br />
+by: 1.0 as Float32)<br />
+)</p>
+<p>initialisedBuffer = initialisedBuffer.map {<br />
+(sampleSeekTime) -&gt; Float32 in<br />
+return Tone(ToneType: self.tone.ToneType,<br />
+frequency: self.tone.frequency / Constants.pcmSampleRateFloat32 * sampleSeekTime,<br />
+amplitude: self.tone.amplitude,<br />
+phase: self.tone.phase).eval()<br />
+}</p>
+<p>buffer.frameLength = self.audioBufferSize<br />
+buffer.floatChannelData![0].initialize(from: &amp;initialisedBuffer,<br />
+count: Int(self.audioBufferSize))<br />
+buffer.floatChannelData![1].initialize(from: &amp;initialisedBuffer,<br />
+count: Int(self.audioBufferSize))<br />
+}</p>
+<p>private func scheduleLoopingBuffer(_ buffer: AVAudioPCMBuffer) -&gt; Void {<br />
+pn.scheduleBuffer(buffer, at: nil, options: AVAudioPlayerNodeBufferOptions.loops) {<br />
+// code to execution upon completion<br />
+}<br />
+}</p>
+<p>private func scheduleBuffer(_ buffer: AVAudioPCMBuffer) -&gt; Void {<br />
+pn.scheduleBuffer(buffer) {<br />
+// code to execute upon completion<br />
+}<br />
+}</p>
+<p>public func playLoop() {<br />
+dq.async {<br />
+self.fillBuffer(self.ab)<br />
+self.scheduleLoopingBuffer(self.ab)<br />
+self.pn.play()<br />
+}<br />
+}</p>
+<p>public func playSingle() {<br />
+dq.async {<br />
+self.fillBuffer(self.ab)<br />
+self.scheduleLoopingBuffer(self.ab)<br />
+self.pn.play()<br />
+}<br />
+}</p>
+<p>public func stop() {<br />
+pn.stop()<br />
+pn.reset()<br />
+}</p>
+<p>deinit {<br />
+eng.stop()<br />
+}<br />
+}</p>
+<p>let tone: Tone = Tone(ToneType: .sine,<br />
+frequency: 200,<br />
+amplitude: 0.1,<br />
+phase: 0.0)</p>
+<p>let toneGenerator: ToneGenerator = ToneGenerator(tone: tone)</p>
+<p>toneGenerator.playLoop()<br />
+sleep(5)<br />
+toneGenerator.stop()</p>
+</article>
+</div> <!-- end gi1 -->
+<aside class="gi2">
+<ul>
+<strong>2019</strong><li>7 Jun <a href="index.html?p=778">plkt.io</a></li><li>29 May <a href="index.html?p=774">Using Amplify to launch your first Gatsby app</a></li><li>29 May <a href="index.html?p=768">Immediate broken pipe when connecting via SSH on Gentoo under VMWare Fusion</a></li><li>22 Apr <a href="index.html?p=754">Debugging ebuild failure on Gentoo for lxml</a></li><li>17 Apr <a href="index.html?p=749">Git up and going</a></li><li>29 Mar <a href="index.html?p=741">Using GPG to master your identity (Part 1)</a></li><li>23 Mar <a href="index.html?p=727">Moving a user cron job to a systemd timer</a></li><li>4 Mar <a href="index.html?p=723">Building plkt.io</a></li><li>21 Feb <a href="index.html?p=714">VLAN Primer</a></li><li>6 Feb <a href="index.html?p=707">Creating a disposable dev environment using libvirt</a></li><li>21 Jan <a href="index.html?p=700">Selectively applying changes with Git Stash</a></li><li>9 Jan <a href="index.html?p=690">2019 Goals and Tentatives</a></li><li>4 Jan <a href="index.html?p=680">Fresh Ubuntu 18.04 Install</a></li><li>3 Jan <a href="index.html?p=675">Quickly setting up a local Tiny Tiny RSS instance with Docker</a></li><br /><strong>2018</strong><li>20 Dec <a href="index.html?p=630">Generating smooth sine tone output on iOS</a></li><li>14 Dec <a href="index.html?p=626">Installing Jupyter on macOS Mojave</a></li><li>28 Nov <a href="index.html?p=602">ifconfig Output on macOS Mojave</a></li><li>23 Nov <a href="index.html?p=598">Setting up macOS Mojave</a></li><li>21 Nov <a href="index.html?p=582">Setting up a Docker Pi-hole DNS server for wired and wireless clients</a></li><li>13 May <a href="index.html?p=663">Understanding SHA256 Part 3</a></li><li>12 May <a href="index.html?p=662">Understanding SHA256 Part 2</a></li><li>11 May <a href="index.html?p=661">Understanding SHA256 Part 1</a></li><li>1 Apr <a href="index.html?p=622">Demoscene</a></li><li>1 Jan <a href="index.html?p=624">Running a Bitcoin node</a></li><br /><strong>2016</strong><li>21 Oct <a href="index.html?p=576">Hosting my own blog</a></li><li>4 Aug <a href="index.html?p=544">Creating a video montage with ffmpeg</a></li><br /><strong>2015</strong><li>27 Dec <a href="index.html?p=524">Cloning Logical Volumes on Linux</a></li><li>29 Aug <a href="index.html?p=520">Google public WiFI</a></li><li>29 Aug <a href="index.html?p=508">Arch Linux on Dell M6800</a></li><li>20 Jul <a href="index.html?p=429">iOS 9 Public Beta 1 Changes</a></li><li>19 Apr <a href="index.html?p=492">PDF Minimalist 2015 Calendar for Printing</a></li><br /><strong>2013</strong><li>1 Apr <a href="index.html?p=484">Setting up a git server accessible via ssh</a></li><br /><strong>2012</strong><li>13 Apr <a href="index.html?p=424">Google&#039;s addition of C class stock</a></li><li>1 Mar <a href="index.html?p=405">Backing up your Gmail account using procmail and fetchmail</a></li><li>26 Jan <a href="index.html?p=396">Quickly Attaching USB Devices to VirtualBox Guests using VBoxManage</a></li><br /><strong>2011</strong><li>2 Jun <a href="index.html?p=389">Predictions for iOS 5</a></li><li>10 Feb <a href="index.html?p=385">HP Veer</a></li><br /><strong>2010</strong><li>1 May <a href="index.html?p=378">Getting Started with Symbian Development</a></li><br /><strong>2009</strong><li>2 Nov <a href="index.html?p=373">Printing to a remote printer</a></li><li>10 Sep <a href="index.html?p=369">KDE DPI Issue</a></li><li>22 Aug <a href="index.html?p=365">Sony NWZ-E438F + Video</a></li><li>11 Aug <a href="index.html?p=361">Movies for August 2009</a></li><li>26 Jul <a href="index.html?p=356">Readline</a></li><li>18 Jul <a href="index.html?p=347">Installing Windows XP in VirtualBox</a></li><li>16 Jul <a href="index.html?p=338">Looking Good&#8230;Minimally</a></li><li>3 Jul <a href="index.html?p=335">FreeBSD and Arch Linux</a></li><li>27 Jun <a href="index.html?p=332">Using your Gmail contacts in Mutt</a></li><li>27 Jun <a href="index.html?p=331">Recent Microsoft Developments</a></li><li>25 Jun <a href="index.html?p=318">Budget Intel Gaming Rig ($500)</a></li><li>15 Jun <a href="index.html?p=325">A tired mind cannot comprehend pointer arithmetic</a></li><li>14 Jun <a href="index.html?p=232">Managing gpg keys across multiple computers</a></li><li>1 Jun <a href="index.html?p=313">Elinks advanced URI management</a></li><li>26 May <a href="index.html?p=311">xf86-video-intel-2.6.3 and xorg-server-1.6.1 &#8230; a big fail</a></li><li>24 May <a href="index.html?p=204">Install a GNU/Linux distribution upon a USB Stick</a></li><li>29 Apr <a href="index.html?p=260">Squashing the PITA!</a></li><br /><strong>2008</strong><li>16 Dec <a href="index.html?p=243">Atomicity</a></li><li>16 Dec <a href="index.html?p=247">Changing the default X11 Cursor</a></li><li>9 Dec <a href="index.html?p=238">Using xbindkeys to manage media buttons</a></li><li>8 Dec <a href="index.html?p=242">xf86-video-intel-2.4.3</a></li><li>15 Nov <a href="index.html?p=234">Compiling 2.6.27.6 using the vanilla kernel tree sources</a></li><li>10 Nov <a href="index.html?p=215">MigrationHeuristic</a></li><li>28 Oct <a href="index.html?p=195">Arch Linux and the HP Compaq 2710p</a></li><li>18 Oct <a href="index.html?p=187">Setting up IMAP on Mutt</a></li><li>7 Oct <a href="index.html?p=152">Managing your wireless connection with Wireless Tools for Linux</a></li><li>19 Aug <a href="index.html?p=177">Upgrading to linux-2.6.27-rc3</a></li><li>10 Aug <a href="index.html?p=146">Automatically logout after X is killed</a></li><li>9 Aug <a href="index.html?p=129">Upgrading to catalyst-8.7</a></li><li>8 Aug <a href="index.html?p=123">Upgrading to linux-2.6.27-rc2</a></li><li>4 Aug <a href="index.html?p=106">Upgrading to linux-2.6.27-rc1</a></li><li>1 Aug <a href="index.html?p=86">Customising Email Signatures with Fortune</a></li><li>28 Jul <a href="index.html?p=85">Time Saving Vim Movement Tips</a></li><li>20 Jul <a href="index.html?p=53">Configuring the default prompt (PS1)</a></li><li>15 Jul <a href="index.html?p=45">Adding additional email accounts to your email setup</a></li><li>12 Jul <a href="index.html?p=47">Setting up Mutt</a></li><li>8 Jul <a href="index.html?p=28">Making Diagrams with Xy-pic</a></li><li>7 Jul <a href="index.html?p=26">Changing The Default X Cursor</a></li><li>6 Jul <a href="index.html?p=24">My Desktop &#8211; The Terminal</a></li><li>30 Jun <a href="index.html?p=18">My Desktop &#8211; Music</a></li><li>28 Jun <a href="index.html?p=15">My Desktop &#8211; The Web</a></li><li>26 Jun <a href="index.html?p=8">My Desktop</a></li><li>25 Jun <a href="index.html?p=79">Rationale</a></li></ul> 
+</aside>
+<footer class="gi3">
+<hr />
+&copy; 2008 &mdash; 2018 Xocite
+</footer>
+</div> <!-- end gc -->
+</body>
+</html>

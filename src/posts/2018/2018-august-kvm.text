@@ -1,0 +1,44 @@
+---
+title: 'Using VMWare to manage multiple passthrough installations'
+pagetitle: 'Using VMWare to manage multiple passthrough installations'
+author: 'Antony Jepson'
+date: '29 August 2018'
+abstract: 'How to use VMWare to run bare metal operating systems.'
+keywords:
+- VMWare
+- KVM
+- Linux
+- Passthru
+---
+I've went through numerous configurations over the years to balance my Steam
+gaming addiction with my Linux workhorse setup.  My predominant and preferred
+configuration is dual-booting with a fast bootup device.  Usually rebooting
+takes less than a minute and lets me focus on the task at hand.  
+
+More recently, I've been using VMWare Workstation to run my Linux workhorse with
+Windows as the host.  While this is a pretty portable setup, I'd like to move to
+having Linux be the host and Windows run as the guest, without using VMware.
+
+Unfortunately, a quick scour of the web shows many people experiencing problems
+with latency, especially when using software solutions to bridge video output
+like Synergy.  So I wanted to document my attempt here to get the setup to work.
+
+Here's the overall goal:
+* No latency between guest video and display
+* No latency on the network 
+* No jitteriness or lag on input devices
+* Multi-monitor support on host OS
+  * Guest / Host
+  * Host / Host
+* Ability to access the guest OS over IP
+* Ability to use one keyboard/mouse across host/guest OS
+
+Here's the configuration:
+
+| Motherboard: ASUS B-350F
+| GPU 1: NVIDIA GTX 1060 6GB
+| GPU 2: <tbd>
+| Storage: Samsung EVO 500GB
+| KVM: <ddm usb kvm>
+| 
+| 
