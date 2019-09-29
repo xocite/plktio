@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{457:function(e,t,n){"use strict";n.r(t);var a=n(0),o=n.n(a),i=n(455),l=n(454);t.default=function(){return o.a.createElement(i.a,null,o.a.createElement(l.a,{title:"404: Not found"}),o.a.createElement("h1",null,"Not found"),o.a.createElement("p",null,"Page doesn't exist.  Need it?  Create it.  ",o.a.createElement("a",{href:"https://github.com/xocite/plktio"},"GitHub repository.")))}}}]);
+//# sourceMappingURL=component---src-pages-404-js-65e52d15067a529c9c11.js.map
