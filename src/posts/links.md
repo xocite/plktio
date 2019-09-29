@@ -1,7 +1,7 @@
 ---
 path: "/links"
 date: "2019-07-14"
-updated: "2019-07-26"
+updated: "2019-08-14"
 title: "Links"
 attract: "Share the enjoyment I've had on things I've watched, read, or listened to recently."
 ---
@@ -9,6 +9,12 @@ Here is a continuously growing list of things I've found interesting to watch,
 read, or listen.  This page will grow over time, so keep an eye on the update
 date.  Let me know if you enjoyed any of these or have anything interesting to
 share.
+
+### August
+* [Down the
+  rabbit-hole](https://googleprojectzero.blogspot.com/2019/08/down-rabbit-hole.html)
+  `2019`: Google's security researcher Tavis Ormandy walks through how the
+  seemingly innocuous can be a source of new research opportunities.
 
 ### July
 * [Patches carved into developer

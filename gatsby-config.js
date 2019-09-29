@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `plkt.io`,
+    title: `Antony Jepson`,
     description: `The best way to see and get involved in what Antony Jepson is doing.`,
     author: `@plktio`,
   },
