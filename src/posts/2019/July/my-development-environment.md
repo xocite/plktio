@@ -32,7 +32,5 @@ and for remote virtual machines, I typically use AWS for heavy work loads and
 Hertzner for lighter ones.
 
 ## Local virtualisation
-OpenBSD 6.5 serves as the foundation for all outgoing connections.  It runs on a
-single CPU virtual machine.
-
+Gentoo 17.1 serves as the foundation for my Linux-based investigations and work.
 
