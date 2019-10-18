@@ -34,9 +34,9 @@ const Contact = () => (
       </ul>
     </ul>
     <h2>Resume</h2>
-    Learn more about my skillset by looking at my <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11.pdf">resume</a>.
+    Learn more about my skillset by looking at my <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-09-12.pdf">resume</a>.
     <br /><br />
-    <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11.pdf"><img src="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-07-11-150px.jpg" alt="Antony Jepson resume thumbnail" /></a>
+    <a href="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-09-12.pdf"><img src="https://s3-eu-west-1.amazonaws.com/plkt.io.public/resume-2019-09-12-150px.jpg" alt="Antony Jepson resume thumbnail" /></a>
   </Layout>
 )
 
