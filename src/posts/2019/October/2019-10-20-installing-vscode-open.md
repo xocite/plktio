@@ -3,7 +3,7 @@ path: "/writing/installing-vscode-open"
 date: "2019-10-20"
 title: "Installing VSCode Open Source Edition"
 commentary: false
-attract: ""
+attract: "Code OSS is surprisingly easy to compile yourself."
 ---
 VSCode is pretty good multi-platform editor made by Microsoft that's available as a [snap](https://snapcraft.io/vscode).  Unfortunately, this snap is released under Microsoft's standard product EULA along with the builds available on their GitHub.  Fortunately, the source code is available under MIT license.  Here's how I built it.
 
