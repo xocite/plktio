@@ -17,15 +17,15 @@ export default function HTML(props) {
       </head>
       <body {...props.bodyAttributes}>
         {props.preBodyComponents}
-        <noscript key="noscript" id="gatsby-noscript">
-          This app works best with JavaScript enabled.
-        </noscript>
         <div
           key={`body`}
           id="___gatsby"
           dangerouslySetInnerHTML={{ __html: props.body }}
         />
         {props.postBodyComponents}
+        <noscript key="noscript" id="gatsby-noscript">
+          JavaScript makes my website work better but I've made sure you can still have an enjoyable experience without it.
+        </noscript>
       </body>
     </html>
   )
