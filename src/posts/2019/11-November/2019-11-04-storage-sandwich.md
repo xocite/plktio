@@ -14,8 +14,10 @@ I think there's too many opportunities to fail here and the cost can be a lot of
 
 Here's what I've settled upon that falls within my risk tolerance.  This is my abstraction compromise between ease of administration, liklihood of data loss, and possibility of data recovery.  We'll start at the physical layer.
 
-Ability to sync at the block level.
-Ability to sync at the data level.
+- Ability to sync at the block level.
+- Ability to sync at the data level.
+- Checksumming options
+
 
 * 3 hard drives of around the same size.
 * * 
