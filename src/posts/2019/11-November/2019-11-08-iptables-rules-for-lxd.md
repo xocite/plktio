@@ -7,7 +7,7 @@ attract: "LXD and IPTables can coexist."
 ---
 I recently had a lot of difficultly working out how to get ufw (the uncomplicated firewall) to work with LXD Linux containers.
 
-Because of all the abstraction taking place, I decided to revisit some of my old iptables configs and amend them to work with LXD.
+Because of all the issues and me not having a lot of time to dig deep into the tool, I decided to revisit some of my old iptables configs and amend them to work with LXD.
 
 # Some disclaimers
 I do want to note that these rules work for me but are not really any guarantee against being attacked, hacked, monitored, MITMed, or <insert-bad-thing-here>.  For me they act as reasonable defense against basic attacks.  For a really important web facing box I'd recommend placing a CDN in front of it and routing traffic through the CDN or alternatively using something like Argo Tunnel and only allowing connections through Argo.
@@ -38,9 +38,11 @@ Looking at the manpage for iptables we have five built-in tables and each of the
   * forward: for altering packets being routed through the box
 
 For command line invocation, we'll be using the following.  The long name is appended to the command line with double dash (--) and the single letter is the abbreviated call with a single dash.  <> are required parameters [] are optional.
-* append(A) <chain> <rule-specification>
-* check(C) <chain> <rule-specification>
-* insert(I) <chain> [rulenum] <rule-specification>
+* append(A) <chain> <rule-specification> add one or more rules to the end of the selected chain
+* check(C) <chain> <rule-specification> check whether a rule matching the specification does exist in the selected chain
+* insert(I) <chain> [rulenum] <rule-specification> insert one or more rules in the selected chain as the given rule number.  If no rulenum specified, default to rulenum as 1 (inserted at the head/top/front of the chain).
+* list(L) [chain] lists the rules
+* new-chain(N) <chain> create a new chain
 
 # Stateful firewall
 ## Default rules
