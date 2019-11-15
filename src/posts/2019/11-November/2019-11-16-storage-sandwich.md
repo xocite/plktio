@@ -1,7 +1,6 @@
 ---
 path: "/writing/creating-a-storage-sandwich"
-date: "2019-11-04
-"
+date: "2019-11-16"
 title: "Creating a storage sandwich"
 commentary: false
 attract: "How I think about my hard drives."
@@ -24,20 +23,13 @@ I'm not sure what the correct term is for this but I consider it to be the merge
 
 Although mdadm is my go-to on Linux, I have been tempted by btrfs' software RAID.  I think for ease of use, I'll continue to stick with mdadm until another challenger comes along.
 
-fdisk -l /dev/md0
-
 # Encryption layer
-There's a lot of options here which is a little concerning because to me it seems like a lot of ways to makes mistakes.  What I've never had any serious issues with is LUKS 
+There's a lot of options here which is a little concerning because to me it seems like a lot of ways to makes mistakes.  What I've never had any serious issues with is LUKS.  You can also use ecryptfs if you want to encrypt on the file level.
 
 # Filesystem layer
 Now usually, some people add another level before this one with LVM but I don't really think there's that much advantages for having multiple partitions on an already complicated set up.  I'd recommend just using loopback files on a single device and apply permissions appropriately or using separate devices with a different partition table.
 
 At this stage, I just slap on btrfs and call it done.  ext4 would work fine here as well.  They are both solid choices.  I tend to avoid setting up ZFS because of the additional licenses I need to accept.  The copy on write nature of the filesystem is a godsend and can really make using the device feel faster.
 
-- Ability to sync at the block level.
-- Ability to sync at the data level.
-- Checksumming options
-
-
-* 3 hard drives of around the same size.
-* * 
+# To summarise
+I normally run btrfs on top of a LUKS encrypted block device on top of a RAID-1 block device built by mdadm on top of two similarly sized harddrives with similar access/write speeds.
