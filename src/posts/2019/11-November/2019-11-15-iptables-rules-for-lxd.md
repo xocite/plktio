@@ -115,4 +115,4 @@ iptables --table mangle --append PREROUTING --source 224.0.0.0/3 -j DROP
 iptables --table mangle --append INPUT --match limit --limit 5/min --jump LOG --log-prefix "iptables denied: " --log-level 7
 ```
 
-You can see that equivalent nft rules are created with `nft list ruleset`.
+You can see that equivalent nft rules are created with `nft list ruleset`.  TBD is to move that NAT rules created by lxdbr0 over.  Perhaps just creating a normal bridge and referencing it in the LXD configuration is enough.
