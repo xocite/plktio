@@ -23,10 +23,10 @@ Device       Start       End   Sectors  Size Type
 /dev/sda3  1550336 117229567 115679232 55.2G Linux LVM
 ```
 
-The plan is to create a new Debian partition with LVM, run debootstrap into it, chroot, set up SSH remote access by copying the config over from the old install.  Snapshotting the configuration and do a test run booting it with libvirt.
+The plan is to create a new Debian partition with LVM, run debootstrap into it, chroot, set up SSH remote access by copying the config over from the old install.
 
 # Preparing LVM
-As with any major operation, we should snapshot our current state so we can restore if things don't go well.
+As with any major operation, we should snapshot our current state so we can restore if things don't go well.  However, because the change is taking place in a new logical volume we can simply leave the old LV untouched.
 
 First we'll backup the LVM headers for physical volumes, volume groups, and logical volumes.
 ```
@@ -47,7 +47,7 @@ lvcreate -L 4G -n newroot volumegroup
 ```
 
 # Creating the new Debian partition
-This part was made easy thanks to Debian's really useful tools.  More information available in their [Developer Documentation][https://www.debian.org/releases/stretch/amd64/apds03.html.en].  Install debootstrap if you don't already have it.
+This part was made easy thanks to Debian's really useful tools.  More information available in their [Developer Documentation][https://www.debian.org/releases/stretch/amd64/apds03.html.en].  Install debootstrap if you don't already have it and walk through the following commands on the target machine.
 
 ```
 mkfs.ext4 /dev/mapper/volumegroup-newroot 
@@ -70,20 +70,21 @@ cp /etc/resolv.conf /mnt/debian/etc/resolv.conf
 cat /etc/apt/sources.list >> /mnt/debian/etc/apt/sources.list
 vim /mnt/debian/etc/apt/sources.list # fix any errors
 LANG=C.UTF-8 chroot /mnt/debian /bin/bash
-apt update
-dpkg-reconfigure tzdata
-mount /boot
-apt install linux-image-4.19.0-6-amd64
-apt install grub2 # don't select to install to any partition
-apt install lvm2
-apt install ssh
-systemctl enable ssh
-editor /etc/ssh/sshd_config # set PermitRootLogin yes
-adduser local
-passwd local
-passwd # set root passwd
+(inside chroot) apt update
+(inside chroot) dpkg-reconfigure tzdata
+(inside chroot) mount /boot
+(inside chroot) apt install linux-image-4.19.0-6-amd64
+(inside chroot) apt install grub2 # don't select to install to any partition
+(inside chroot) apt install lvm2
+(inside chroot) apt install ssh
+(inside chroot) systemctl enable ssh
+(inside chroot) editor /etc/ssh/sshd_config # set PermitRootLogin yes
+(inside chroot) adduser local
+(inside chroot) passwd local
+(inside chroot) passwd # set root passwd
 ```
-Now the system is completely configured for booting.  You'll need to check /boot/grub/grub.cfg and make sure that the LVM ID referenced (use lvdisplay) matches the newroot logical volume.
+
+Now the system is completely configured for booting.  You'll need to check /boot/grub/grub.cfg and make sure that the newroot LVM ID is referenced (use lvdisplay).
 
 Reboot the system.  If it doesn't work, you'll likely need to get out your external monitor and external keyboard.  Luckily, I survived unharmed :).
 
@@ -94,9 +95,9 @@ SSH into the new system as root and finish installing the standard system files.
 tasksel install standard
 ```
 
-Don't forget to delete the old hostname in your sshd config as new keys were generated for the new install.
+Don't forget to delete the old entry in your local machine's sshd config as new keys were generated for the new install.
 
-You can remove the old LVM logical volume or use it to bring over missing configuration from the new install.
+You can remove the old LVM logical volume or use it to bring over any missing configuration from the new install.
 
 And with that, consider your Debian install refreshed!
 
