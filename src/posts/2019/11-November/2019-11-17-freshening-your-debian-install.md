@@ -47,7 +47,7 @@ lvcreate -L 4G -n newroot volumegroup
 ```
 
 # Creating the new Debian partition
-This part was made easy thanks to Debian's really useful tools.  More information available in their [Developer Documentation][https://www.debian.org/releases/stretch/amd64/apds03.html.en].  Install debootstrap if you don't already have it and walk through the following commands on the target machine.
+This part was made easy thanks to Debian's really useful tools.  More information available in their [Developer Documentation](https://www.debian.org/releases/stretch/amd64/apds03.html.en).  Install debootstrap if you don't already have it and walk through the following commands on the target machine.
 
 ```
 mkfs.ext4 /dev/mapper/volumegroup-newroot 

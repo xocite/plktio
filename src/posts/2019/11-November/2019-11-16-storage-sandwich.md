@@ -17,7 +17,7 @@ Here's what I've settled upon that falls within my risk tolerance.  This is my a
 I primarily use external hard drives just because I like to move my setup around.  So in my case, I have 2 Western Digital hard drives and one spare that I occasionally sync with the first two.  I use drives of around the same size (2TB) and partition them with a single partition and GPT header.  I size the partition around 8% smaller than the full drive size to account for small differences in size between manufacturers and for a bit of breathing room should I want to do some partition changes later.  Connecting the devices via USB-3 is a must so you'll need to use `lsusb` to check which root hub you are plugging in the devices.
 
 # Merged device layer
-I'm not sure what the correct term is for this but I consider it to be the merged device layer.  Essentially, how multiple devices get represented as a single whole.  This layer usually takes care of duplicating, striping, reading, and writing data from the physical drives independented of where it's located.
+I'm not sure what the correct term is for this but I consider it to be the merged device layer.  Essentially, how multiple devices get represented as a single whole.  This layer usually takes care of duplicating, striping, reading, and writing data from the physical drives independently of where it's located.
 
 Although mdadm is my go-to on Linux, I have been tempted by btrfs' software RAID.  I think for ease of use, I'll continue to stick with mdadm until another challenger comes along.
 
