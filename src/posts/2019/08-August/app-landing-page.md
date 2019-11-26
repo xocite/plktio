@@ -1,5 +1,5 @@
 ---
-path: "/app/binaural-waves"
+path: "/apps/binaural-waves"
 date: "2019-08-01"
 title: "Binaural Waves"
 commentary: false
@@ -11,6 +11,8 @@ sound tones.  Use this app when you need to hunker down and get things done or
 when you need to chill out.
 
 This is the first release and I have a lot planned over the coming months.
+
+For support inquiries, please see the following [support and feedback page](https://forms.gle/TsJydeEbxYQT2grh7).
 
 [Download here](https://apps.apple.com/us/app/binaural-waves/id1459988902)
 
