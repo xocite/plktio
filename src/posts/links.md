@@ -10,6 +10,11 @@ read, or listen.  This page will grow over time, so keep an eye on the update
 date.  Let me know if you enjoyed any of these or have anything interesting to
 share.
 
+### November
+* [Deep Blue vs Garry Kasparov](https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov)
+  `1997`: Crazy to think how far we've come since this match.
+
+
 ### August
 * [Down the
   rabbit-hole](https://googleprojectzero.blogspot.com/2019/08/down-rabbit-hole.html)
