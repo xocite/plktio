@@ -1,13 +1,14 @@
 ---
 path: "/writing/working-without-internet"
 date: "2019-11-24"
+updated: "2019-11-26"
 title: "Working without Internet"
 commentary: false
 attract: "9/10 WiFi access points suck."
 ---
 **This is a work in progress article.  You can contribute to its completion via GitHub (see commit ID in the footer.)**
 
-I've been travelling over the past week without Internet and I had (a lot) of time to reflect upon this working style: GTD with no Internet access.  If you have a computer with a reasonable amount of space or some sort of mini computer like the Raspberry Pi connected to a large external hard drive, you can follow this guide to set up a travel optimised working environment.
+I've been travelling around the UK over the past week without Internet and I had (a lot) of time to reflect upon this working style: GTD with no Internet access.  If you have a computer with a reasonable amount of space or some sort of mini computer like the Raspberry Pi connected to a large external hard drive, you can follow this guide to set up a travel optimised working environment.
 
 TLDR;
 * Download what you need ahead of time without prejudice.
@@ -28,6 +29,15 @@ You can use Windows with WSL2 + Docker/LXC; Mac OS with a Raspberry Pi or Docker
 
 # Downloads
 You'll be downloading a lot of things so spend some time to think about your data management.  You can set up a separate partition or volume to store this data and use a different filesystem the optimises for fast reads.
+
+# Reading
+After all that work, you may want to curl up with a book.  Whether you're using an e-book reader or printed copies, you can find a lot of items to read on [Project Gutenberg](https://www.gutenberg.org).
+
+# Server
+Most of these services are served over HTTP so you'll need to have a web server handy.  Anything basic will do - be it Apache, Nginx, or even node.js.  For more advanced installations like MediaWiki, you'll need PHP support so for convenience and ease of maintenance it'll be best to use Apache + PHP.
+
+## Maps
+Offline maps are useful for trip planning and routing.  For most cases, it'll be enough to just download some form of Open Street Maps on your phone.  In this case, we're going to set up OSM for trip planning on your device.
 
 ## Wikipedia
 ### Quick setup
