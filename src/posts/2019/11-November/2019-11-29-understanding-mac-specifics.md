@@ -6,14 +6,14 @@ commentary: false
 attract: "Like systemctl, but, Mac."
 ---
 
-I use a Mac as my main dev box for better or for worse.  I also use a mini-PC for deployments I want accessible to all my devices.  To orchestrate all these devices, I use a combination of [Vagrant](https://www.vagrantup.com/intro/index.html), for virtual machine provisioning, [Ansible](https://www.ansible.com/), for writing playbooks to get the *ahem* required *ahem* Docker installed, and [Docker](https://www.docker.com/) to handle my containers.  I am also building a local container registry which houes custom builds of various programs.  Of course, all this is run locally by [minikube](https://github.com/kubernetes/minikube), the Kubernetes local cluster.
+I use a Mac as my main dev box for better or for worse.  I also use a mini-PC for deployments I want accessible to all my devices.  To orchestrate all these devices, I use a combination of [Vagrant](https://www.vagrantup.com/intro/index.html), for virtual machine provisioning, [Ansible](https://www.ansible.com/), for writing playbooks to get the *ahem* required *ahem* Docker installed, and [Docker](https://www.docker.com/) to handle my containers.  I am also building a local container registry which houses custom builds of various programs.  Of course, all this is run locally by [minikube](https://github.com/kubernetes/minikube), the Kubernetes local cluster.
 
-It's quite a complicated setup and I was using LXD before but I just found snapd to cause so many difficult to debug problems that I decided to fully embrace the, as Elon puts it, massive spire in the topological map of technological advancements (from this [interview](https://www.youtube.com/watch?v=f3lUEnMaiAU)).
+It's quite a complicated setup.  I previously used LXD to manage my containers but it's interaction with the system via snapd was difficult to debug.  Therefore, I decided to fully embrace, as Elon puts it, massive spire in the topological map of technological advancements (from this [interview](https://www.youtube.com/watch?v=f3lUEnMaiAU)).
 
 Before installing all these programs, I took some time to look at how services and networking is managed in macOS as I just knew I would run into some configuration problems down the road.
 
 # Networking
-Most of macOS networking is sufficiently handled with the System Preferences Networking pane.  For quick terminal look up, you can use the netstat and ifconfig tools.  On modern distros, these tools are supplanted by `ss` and `ip` respectively.
+Most of macOS networking is sufficiently handled in the System Preferences Networking pane.  For quick terminal look up of the network interfaces, you can use the netstat and ifconfig tools.  On modern distros, these tools are supplanted by `ss` and `ip` respectively.
 
 # System services
 [`launchd`](https://www.launchd.info/) manages the daemons, applications, processes, and scripts in macOS.  It's not as powerful as a modern installation of systemd but it just works, so to speak.  Agents and daemons are usually stored in the /Library set of directories: ~/Library for local agents, /Library for global agents, and /System/Library for system agents.
