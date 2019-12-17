@@ -10,6 +10,10 @@ read, or listen.  This page will grow over time, so keep an eye on the update
 date.  Let me know if you enjoyed any of these or have anything interesting to
 share.
 
+### December
+* `2009` [The free-energy principle - a rough guide to the brain](https://www.fil.ion.ucl.ac.uk/~karl/The%20free-energy%20principle%20-%20a%20rough%20guide%20to%20the%20brain.pdf): your brain encourages you to optimise your environment to reduce surprises.
+
+
 ### November
 * [Deep Blue vs Garry Kasparov](https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov)
   `1997`: Crazy to think how far we've come since this match.
