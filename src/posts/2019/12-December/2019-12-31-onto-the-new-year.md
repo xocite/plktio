@@ -7,9 +7,12 @@ attract: "My thoughts for the next decade, 2020."
 ---
 
 Wow, what a year it has been.  If you're reading this, it means I've
-successfully completed my first New Year's Resolution of self-hosting this
-website.  It is now live on a VPS at [Hetzner](https://hetzner.com) complete
-with a HTTPS certificate signed by [Let's Encrypt](https://letsencrypt.org).
+successfully completed my first New Year's Resolution of hosting this website on
+my own web server.  It is now live on a VPS at [Hetzner](https://hetzner.com)
+complete with a HTTPS certificate signed by [Let's
+Encrypt](https://letsencrypt.org).  While this isn't a huge achievement in
+itself, I've done much more than simply copy the static files to
+*/var/www/html*.
 
 The journey to self-hosting this blog took longer than anticipated because I
 spent a lot of time creating a reproducible setup.  This means I can recreate
@@ -17,11 +20,13 @@ the plkt.io deployment on my local machine for testing and have that same
 configuration be pushed on "production" aka this web server.
 
 To achieve this, I hand-crafted a series of incremental Dockerfiles that build
-the container serving this page.  I learned alot about setting up infrastructure
-via code and having single application containers work well.  There's still
-quite a bit left to do so I consider this Phase I of my new website deployment.
+the container serving this page.  Starting from Debian, adding in Apache, and
+then configuring certbot and building the website from JS.  I learned alot about
+setting up infrastructure via code and having single application containers work
+well.  There's still quite a bit left to do but for now I consider the first
+phase of my 2020 plan complete!
 
-In Phase II, I'll be moving from a simple `docker run` set up to something more
+In Phase II, I'll be moving from a simple `docker run` setup to something more
 glamorous *ahem* I mean modern.  While I don't get much traffic to this site
 today, I do plan to expose more services here, with the next in line being a
 self-hosted git repo at [git.plkt.io](git.plkt.io).  This page will serve as the
@@ -46,7 +51,7 @@ the snippets live on my site.  I think long term we need to move away from
 having search engines be arbiters of knowledge discovery and let recommendations
 be served directly from the content creators.  More to come in this space!
 
-Phase V is still under wraps.  As my knowledge around moving to the cloud,
-containerising applications, and building infrastructure with code improves, I
-can see myself start a consulting business for the local space.  Nothing
-finalised yet but something on the horizon for 2020.
+Phase V is still under wraps.  As my knowledge around moving workloads to the
+cloud, containerising applications, and building infrastructure with code
+improves, I can see myself start a consulting business for my local region.
+Nothing finalised yet but something to be excited about for 2020.
